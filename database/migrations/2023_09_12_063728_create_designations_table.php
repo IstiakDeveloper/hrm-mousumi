@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('job_description')->nullable();
-            $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('department_id');
             $table->timestamps();
 
-            $table->foreign('branch_id')->references('id')->on('branches');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 

@@ -18,7 +18,7 @@ class DesignationController extends Controller
 
     {
         $departments = Department::all();
-        return view('admin.designations.create', compact('departments'));
+        return view('admin.designations.create', ['departments' => $departments]);
     }
 
     public function store(Request $request)
@@ -26,13 +26,13 @@ class DesignationController extends Controller
         // Validate and store designation data
         $data = $request->validate([
             'name' => 'required|string',
-            'description' => 'nullable|string',
-            'branch_id' => 'required|integer',
+            'job_description' => 'nullable|string',
+            'department_id' => 'required|integer',
         ]);
 
-        Designation::create($data);
+        $designation = Designation::create($data);
 
-        return redirect()->route('admin.designations.index')->with('success', 'Designation created successfully');
+        return redirect()->route('designations.index')->with('success', 'Designation created successfully');
     }
 
     public function edit(Designation $designation)

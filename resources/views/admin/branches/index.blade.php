@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container mx-auto py-4">
-    <h1 class="text-2xl font-semibold">Branches</h1>
-    <a href="{{ route('branches.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Branch</a>
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-semibold">Branches</h1>
+        <a href="{{ route('branches.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Branch</a>
+    </div>
     @if (count($branches) > 0)
     <table class="min-w-full">
         <thead>

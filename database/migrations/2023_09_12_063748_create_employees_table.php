@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->text('address');
-            $table->string('employee_id')->unique();
+            $table->string('employee_id')->unique()->nullable()->default(null);
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('designation_id');

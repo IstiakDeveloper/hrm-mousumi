@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container mx-auto py-4">
-    <h1 class="text-2xl font-semibold">Departments</h1>
-    <a href="{{ route('departments.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Department</a>
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-semibold">Departments</h1>
+        <a href="{{ route('departments.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Department</a>
+    </div>
     @if (count($departments) > 0)
     <table class="min-w-full">
         <thead>

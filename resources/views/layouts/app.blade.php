@@ -48,6 +48,12 @@
                             <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
                         </ul>
                     </li>
+                    <li class="mb-2">
+                        <a href="{{route('employees.index')}}" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
+                            <span class="w-6"><i class="fa-regular fa-user"></i></span>
+                            <span class="ml-2">Employee</span>
+                        </a>
+                    </li>
                     <!-- Dropdown Menu - Users -->
                     <li class="mb-2 relative">
                         <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('users-dropdown')">
