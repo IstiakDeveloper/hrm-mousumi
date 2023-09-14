@@ -1,128 +1,130 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-4">
-    <h1 class="text-2xl font-semibold mb-6">Employee Profile</h1>
-    <div class="bg-white p-4 rounded-lg shadow mb-6">
-        <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
-        <!-- Name -->
-        <div class="mb-4">
-            <label class="block font-medium">Name:</label>
-            <p>{{ $employee->name }}</p>
-        </div>
-        <!-- Phone -->
-        <div class="mb-4">
-            <label class="block font-medium">Phone:</label>
-            <p>{{ $employee->phone }}</p>
-        </div>
-        <!-- Date of Birth -->
-        <div class="mb-4">
-            <label class="block font-medium">Date of Birth:</label>
-            <p>{{ $employee->date_of_birth }}</p>
-        </div>
-        <!-- Gender -->
-        <div class="mb-4">
-            <label class="block font-medium">Gender:</label>
-            <p>{{ $employee->gender }}</p>
-        </div>
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block font-medium">Email:</label>
-            <p>{{ $employee->email }}</p>
-        </div>
-        <!-- Address -->
-        <div class="mb-4">
-            <label class="block font-medium">Address:</label>
-            <p>{{ $employee->address }}</p>
-        </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg shadow mb-6">
-        <h2 class="text-xl font-semibold mb-4">Company Information</h2>
-        <!-- Employee ID -->
-        <div class="mb-4">
-            <label class="block font-medium">Employee ID:</label>
-            <p>{{ $employee->employee_id }}</p>
-        </div>
-        <!-- Branch -->
-        <div class="mb-4">
-            <label class="block font-medium">Branch:</label>
-            <p>{{ $employee->branch->name }}</p>
-        </div>
-        <!-- Department -->
-        <div class="mb-4">
-            <label class="block font-medium">Department:</label>
-            <p>{{ $employee->department->name }}</p>
-        </div>
-        <!-- Designation -->
-        <div class="mb-4">
-            <label class="block font-medium">Designation:</label>
-            <p>{{ $employee->designation->name }}</p>
-        </div>
-        <!-- Date of Joining -->
-        <div class="mb-4">
-            <label class="block font-medium">Date of Joining:</label>
-            <p>{{ $employee->date_of_joining }}</p>
-        </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg shadow mb-6">
-        <h2 class="text-xl font-semibold mb-4">Document</h2>
-        <!-- Certificate -->
-        <div class="mb-4">
-            <label class="block font-medium">Certificate:</label>
-            @if ($employee->certificate)
-                <a href="{{ asset('storage/' . $employee->certificate) }}" target="_blank" class="text-blue-500 hover:underline">View Certificate</a>
-            @else
-                <p>No certificate uploaded</p>
-            @endif
-        </div>
-        <!-- Resume -->
-        <div class="mb-4">
-            <label class="block font-medium">Resume:</label>
-            @if ($employee->resume)
-                <a href="{{ asset('storage/' . $employee->resume) }}" target="_blank" class="text-blue-500 hover:underline">View Resume</a>
-            @else
-                <p>No resume uploaded</p>
-            @endif
-        </div>
-        <!-- Photo -->
-        <div class="mb-4">
-            <label class="block font-medium">Photo:</label>
-            @if ($employee->photo)
-                <img src="{{ asset('storage/' . $employee->photo) }}" alt="Employee Photo" class="w-32 h-32 rounded-full">
-            @else
-                <p>No photo uploaded</p>
-            @endif
-        </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg shadow mb-6">
-        <h2 class="text-xl font-semibold mb-4">Bank Details</h2>
-        <!-- Account Holder Name -->
-        <div class="mb-4">
-            <label class="block font-medium">Account Holder Name:</label>
-            <p>{{ $employee->account_holder_name ?? 'Not provided' }}</p>
-        </div>
-        <!-- Account Number -->
-        <div class="mb-4">
-            <label class="block font-medium">Account Number:</label>
-            <p>{{ $employee->account_number ?? 'Not provided' }}</p>
-        </div>
-        <!-- Bank Name -->
-        <div class="mb-4">
-            <label class="block font-medium">Bank Name:</label>
-            <p>{{ $employee->bank_name ?? 'Not provided' }}</p>
-        </div>
-        <!-- Branch Location -->
-        <div class="mb-4">
-            <label class="block font-medium">Branch Location:</label>
-            <p>{{ $employee->branch_location ?? 'Not provided' }}</p>
-        </div>
-        <!-- Swift Code -->
-        <div class="mb-4">
-            <label class="block font-medium">Swift Code:</label>
-            <p>{{ $employee->swift_code ?? 'Not provided' }}</p>
+<div class="bg-gray-100">
+    <div class="max-w-6xl mx-auto py-8">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="p-4 flex justify-end">
+                <a href="{{ route('employees.print', ['employee' => $employee->id]) }}" class="bg-blue-500 text-white px-4 py-2 rounded-full mr-2 hover:bg-blue-600">Print</a>
+                <a href="{{ route('employees.download', ['employee' => $employee]) }}" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">Download PDF</a>
+            </div>
+            <div class="px-6 py-4">
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto">
+                        @if ($employee->photo)
+                            <img src="{{ asset('storage/' . $employee->photo) }}" alt="Employee Photo" class="w-32 h-32 rounded-full">
+                        @else
+                            <span class="text-gray-600 text-4xl flex items-center justify-center h-full w-full">No Photo</span>
+                        @endif
+                    </div>
+                    <h1 class="text-2xl font-semibold mt-4">{{ $employee->name }}</h1>
+                    <p class="text-gray-600">Employee ID: {{ $employee->employee_id }}</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-300">
+                <div class="px-6 py-4">
+                    <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+                    <dl class="grid grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <dt class="font-medium">Phone:</dt>
+                            <dd>{{ $employee->phone }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Date of Birth:</dt>
+                            <dd>{{ $employee->date_of_birth }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Gender:</dt>
+                            <dd>{{ $employee->gender }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Email:</dt>
+                            <dd>{{ $employee->email }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Address:</dt>
+                            <dd>{{ $employee->address }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="border-t border-gray-300">
+                <div class="px-6 py-4">
+                    <h2 class="text-xl font-semibold mb-4">Company Information</h2>
+                    <dl class="grid grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <dt class="font-medium">Branch:</dt>
+                            <dd>{{ $employee->branch->name }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Department:</dt>
+                            <dd>{{ $employee->department->name }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Designation:</dt>
+                            <dd>{{ $employee->designation->name }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Date of Joining:</dt>
+                            <dd>{{ $employee->date_of_joining }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="border-t border-gray-300">
+                <div class="px-6 py-4">
+                    <h2 class="text-xl font-semibold mb-4">Document Information</h2>
+                    <dl class="grid grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <dt class="font-medium">Certificate:</dt>
+                            <dd>
+                                @if ($employee->certificate)
+                                    <a href="{{ asset('storage/' . $employee->certificate) }}" class="text-blue-500 hover:underline" target="_blank">View Certificate</a>
+                                @else
+                                    No certificate uploaded
+                                @endif
+                            </dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Resume:</dt>
+                            <dd>
+                                @if ($employee->resume)
+                                    <a href="{{ asset('storage/' . $employee->resume) }}" class="text-blue-500 hover:underline" target="_blank">View Resume</a>
+                                @else
+                                    No resume uploaded
+                                @endif
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="border-t border-gray-300">
+                <div class="px-6 py-4">
+                    <h2 class="text-xl font-semibold mb-4">Bank Details</h2>
+                    <dl class="grid grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <dt class="font-medium">Account Holder Name:</dt>
+                            <dd>{{ $employee->account_holder_name ?? 'Not provided' }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Account Number:</dt>
+                            <dd>{{ $employee->account_number ?? 'Not provided' }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Bank Name:</dt>
+                            <dd>{{ $employee->bank_name ?? 'Not provided' }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Branch Location:</dt>
+                            <dd>{{ $employee->branch_location ?? 'Not provided' }}</dd>
+                        </div>
+                        <div class="mb-4">
+                            <dt class="font-medium">Swift Code:</dt>
+                            <dd>{{ $employee->swift_code ?? 'Not provided' }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
         </div>
     </div>
 </div>

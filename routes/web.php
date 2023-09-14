@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentController::class);
     Route::resource('designations', DesignationController::class);
     Route::resource('employees', EmployeeController::class);
+    Route::get('employees/{employee}/print', [EmployeeController::class, 'print'])->name('employees.print');
+    Route::get('employees/{employee}/download',  [EmployeeController::class, 'download'])->name('employees.download');
+
 
 });
 

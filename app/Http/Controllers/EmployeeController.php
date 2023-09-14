@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use App\Models\Employee;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
+use PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class EmployeeController extends Controller
 {
@@ -105,6 +109,26 @@ class EmployeeController extends Controller
     {
         return view('admin.employees.show', compact('employee'));
     }
+
+    public function download($id)
+    {
+        $employee = Employee::find($id);
+
+        // Load the PDF view and pass the employee data
+        $pdf = PDF::loadView('admin.employees.pdf', compact('employee'));
+
+        // Generate a unique PDF file name with the employee's ID
+        $pdfFileName = 'emp_' . $employee->employee_id . '.pdf';
+
+        // Set the Content-Disposition header with the desired file name
+        $headers = [
+            'Content-Disposition' => 'attachment; filename="' . $pdfFileName . '"',
+        ];
+
+        return $pdf->download($pdfFileName, $headers);
+    }
+
+
 
     public function edit(Employee $employee)
     {
