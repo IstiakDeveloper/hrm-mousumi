@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
+use App\Models\User;
 use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -61,6 +62,15 @@ class EmployeeController extends Controller
 
         // Generate employee ID
         $generatedEmployeeID = $this->generateEmployeeID();
+
+        // Create a user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+
         // Handle file uploads (certificate, resume, photo) if provided
         if ($request->hasFile('certificate')) {
             $certificatePath = $request->file('certificate')->store('certificates', 'public');
@@ -78,7 +88,10 @@ class EmployeeController extends Controller
         }
 
         // Save the employee data to the database
-        Employee::create(array_merge($data, ['employee_id' => $generatedEmployeeID]));
+        $employee = Employee::create(array_merge($data, [
+            'employee_id' => $generatedEmployeeID,
+            'user_id' => $user->id,
+        ]));
 
 
         return redirect()->route('employees.index')->with('success', 'Employee created successfully')->with('generatedEmployeeID', $generatedEmployeeID);

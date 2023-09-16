@@ -5,7 +5,9 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,37 @@ Route::middleware('auth')->group(function () {
     Route::get('employees/{employee}/print', [EmployeeController::class, 'print'])->name('employees.print');
     Route::get('employees/{employee}/download',  [EmployeeController::class, 'download'])->name('employees.download');
 
+    Route::controller(RoleController::class)->group(function(){
+        Route::get('all/permission', 'AllPermission')->name('all.permission');
+        Route::get('create/permission/create', 'CreatePermission')->name('permission.create');
+        Route::post('store/permission/store', 'StorePermission')->name('permission.store');
+        Route::get('edit/permission/{id}', 'EditPermission')->name('permission.edit');
+        Route::post('update/permission', 'UpdatePermission')->name('permission.update');
+        Route::delete('delete/permission/{id}', 'DestroyPermission')->name('permission.destroy');
+
+        Route::get('import/permission', 'ImportPermission')->name('permission.import');
+        Route::get('permission/export', 'Export')->name('permission.export');
+        Route::post('permission/import', 'Import')->name('import');
+    });
+
+    Route::controller(RoleController::class)->group(function(){
+        Route::get('all/roles', 'AllRoles')->name('role.all');
+        Route::get('role/create', 'CreateRole')->name('role.create');
+        Route::post('role/store', 'StoreRole')->name('role.store');
+        Route::get('edit/role/{id}', 'EditRole')->name('role.edit');
+        Route::post('update/role', 'UpdateRole')->name('role.update');
+        Route::delete('delete/role/{id}', 'DestroyRole')->name('role.destroy');
+
+        Route::get('add/roles/permission', 'AddRolesPermission')->name('add.roles.permission');
+        Route::post('roles/permission/store', 'StoreRolesPermission')->name('roles.permission.store');
+        Route::get('all/roles/permission', 'AllRolesPermission')->name('roles.permission.all');
+
+        
+
+        // Route::get('import/permission', 'ImportPermission')->name('permission.import');
+        // Route::get('permission/export', 'Export')->name('permission.export');
+        // Route::post('permission/import', 'Import')->name('import');
+    });
 
 });
 

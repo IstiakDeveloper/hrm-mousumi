@@ -54,6 +54,25 @@
                             <span class="ml-2">Employee</span>
                         </a>
                     </li>
+
+                    <!-- Dropdown Menu - Permission -->
+                    <li class="mb-2 relative">
+                        <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('permission-dropdown')">
+                            <span class="w-6"><i class="fa-solid fa-thumbtack"></i></span>
+                            <span class="ml-2">Role & Permission</span>
+                            <span class="ml-auto">
+                                <i id="permission-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                            </span>
+                        </a>
+                        <!-- Dropdown Items - permission -->
+                        <ul id="permission-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
+                            <li><a href="{{route('all.permission')}}" class="block px-4 py-2 hover:bg-gray-700">All Permissions</a></li>
+                            <li><a href="{{route('role.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles</a></li>
+                            <li><a href="{{route('add.roles.permission')}}" class="block px-4 py-2 hover:bg-gray-700">Roles in Permission</a></li>
+                            <li><a href="{{route('roles.permission.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles in Permission</a></li>
+                        </ul>
+                    </li>
+
                     <!-- Dropdown Menu - Users -->
                     <li class="mb-2 relative">
                         <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('users-dropdown')">
@@ -127,4 +146,4 @@
             }
         </script>
     </body>
-</html> ==>
+</html>
