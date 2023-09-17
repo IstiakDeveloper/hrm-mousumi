@@ -29,8 +29,8 @@
                     @endforeach
                 </td>
                 <td class="py-2 px-4 text-center">
-                    <a href="{{ route('role.edit', $item->id) }}" class="text-yellow-500 hover:underline">Edit</a>
-                    <form class="inline-block" action="{{ route('role.destroy', $item->id) }}" method="POST">
+                    <a href="{{ route('admin.role.edit', $item->id) }}" class="text-yellow-500 hover:underline">Edit</a>
+                    <form class="inline-block" action="{{ route('admin.role.destroy', $item->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500 hover:underline" onclick="return confirm('Are you sure?')">Delete</button>

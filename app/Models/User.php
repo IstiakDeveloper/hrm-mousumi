@@ -9,11 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use DB;
-
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
-    use HasRoles;
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
@@ -25,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -47,6 +47,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function hasRole($roleName)
+    {
+        return optional($this->role)->name === $roleName;
+    }
+
     public static function getpermissionGroups() {
         $permission_groups = DB::table('permissions')->select('group_name')->groupBy('group_name')->get();
         return $permission_groups;
@@ -59,4 +69,16 @@ class User extends Authenticatable
                         ->get();
         return $permissions;
     }
+
+    public static function roleHasPermissions($role, $permissions) {
+        $hasPermission = true;
+        foreach ($permissions as $permission) {
+            if (!$role->hasPermissionTo($permission->name)) {
+                $hasPermission = false;
+            }
+            return $hasPermission;
+        }
+    }
+
 }
+

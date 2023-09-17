@@ -36,6 +36,12 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Check if the user is allowed to register
+        if (!Auth::user() || !Auth::user()->hasRole('superadmin')) {
+            return redirect()->back()->withErrors(['You are not authorized to register users.']);
+        }
+
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

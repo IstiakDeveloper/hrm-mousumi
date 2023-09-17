@@ -14,6 +14,13 @@ use DB;
 
 class RoleController extends Controller
 {
+
+    public function createSuperAdminRole()
+    {
+        Role::create(['name' => 'superadmin']);
+        return redirect()->back()->with('success', 'Super Admin role created successfully.');
+    }
+
     public function AllPermission(){
         $permissions = Permission::all();
 
@@ -112,7 +119,7 @@ class RoleController extends Controller
 
 
     //Setup Roles in permission
-    public function AddRolesPermission(){
+    public function AddRolesPermission() {
         $roles = Role::all();
         $permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
@@ -120,20 +127,15 @@ class RoleController extends Controller
         return view('admin.rolesetup.add_roles_permission', compact('roles', 'permissions', 'permission_groups'));
     }
 
-    public function StoreRolesPermission(Request $request){
-        $data = [];
+    public function StoreRolesPermission(Request $request) {
+        $role = Role::findOrFail($request->group_name);
         $permissions = $request->permission;
 
-        foreach ($permissions as $permission_id) {
-            $data[] = [
-                'role_id' => $request->group_name, // Assuming group_name holds role_id
-                'permission_id' => $permission_id
-            ];
+        if (!empty($permissions)) {
+            $role->syncPermissions($permissions);
         }
 
-        DB::table('role_has_permissions')->insert($data);
-
-        return redirect()->back();
+        return redirect()->route('roles.permission.all');
     }
 
     public function AllRolesPermission() {
@@ -141,6 +143,33 @@ class RoleController extends Controller
         return view('admin.rolesetup.all_roles_permission', compact('roles'));
     }
 
+    public function AdminEditRoles($id) {
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all();
+        $permission_groups = User::getpermissionGroups();
+
+        return view('admin.rolesetup.edit_roles_permission', compact('role', 'permissions', 'permission_groups'));
+    }
+
+    public function AdminUpdateRoles(Request $request, $id) {
+        $role = Role::findOrFail($id);
+        $permissions = $request->permission;
+
+        if (!empty($permissions)) {
+            $role->syncPermissions($permissions);
+        }
+
+        return redirect()->route('roles.permission.all');
+    }
+
+    public function AdminDeleteRoles($id) {
+        $role = Role::findOrFail($id);
+        if (!is_null($role)) {
+            $role->delete();
+        }
+
+        return redirect()->back();
+    }
 
 
 }

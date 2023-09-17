@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('create-superadmin', [AdminController::class, 'createSuperAdmin']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -65,13 +68,28 @@ Route::middleware('auth')->group(function () {
         Route::post('roles/permission/store', 'StoreRolesPermission')->name('roles.permission.store');
         Route::get('all/roles/permission', 'AllRolesPermission')->name('roles.permission.all');
 
-        
+        Route::get('admin/edit/role/{id}', 'AdminEditRoles')->name('admin.role.edit');
+        Route::post('admin/role/update/{id}', 'AdminUpdateRoles')->name('admin.roles.update');
+        Route::delete('admin/role/delete/{id}', 'AdminDeleteRoles')->name('admin.role.destroy');
+
 
         // Route::get('import/permission', 'ImportPermission')->name('permission.import');
         // Route::get('permission/export', 'Export')->name('permission.export');
         // Route::post('permission/import', 'Import')->name('import');
     });
 
+    Route::controller(AdminController::class)->group(function(){
+        Route::get('all/users', 'AllUsers')->name('all.users');
+        Route::get('add/user/create', 'CreateUser')->name('user.create');
+        Route::post('admin/users',  'store')->name('admin.users.store');
+
+
+    });
+
+    Route::get('/test-dashboard-permission', [TestController::class, 'testDashboardPermission']);
+
+
 });
 
 require __DIR__.'/auth.php';
+

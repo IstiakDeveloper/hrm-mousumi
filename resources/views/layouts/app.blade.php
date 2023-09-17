@@ -25,14 +25,17 @@
             <!-- Sidebar Navigation -->
             <nav class="px-4">
                 <ul>
-                    <!-- Dashboard -->
-                    <li class="mb-2">
-                        <a href="#" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
-                            <span class="w-6"><i class="fas fa-tachometer-alt"></i></span>
-                            <span class="ml-2">Dashboard</span>
-                        </a>
-                    </li>
-                    <!-- Dropdown Menu - Settings -->
+                    @if (Auth::user()->can('dashboard.menu'))
+                        <!-- Dashboard -->
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
+                                <span class="w-6"><i class="fas fa-tachometer-alt"></i></span>
+                                <span class="ml-2">Dashboard</span>
+                            </a>
+                        </li>
+                    @endif
+
+                <!-- Dropdown Menu - Settings -->
                     <li class="mb-2 relative">
                         <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('settings-dropdown')">
                             <span class="w-6"><i class="fas fa-cogs"></i></span>
@@ -84,7 +87,7 @@
                         </a>
                         <!-- Dropdown Items - Users -->
                         <ul id="users-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">All Users</a></li>
+                            <li><a href="{{route('all.users')}}" class="block px-4 py-2 hover:bg-gray-700">All Users</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Active Users</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Inactive Users</a></li>
                         </ul>

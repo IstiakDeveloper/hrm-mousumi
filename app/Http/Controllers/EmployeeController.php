@@ -12,6 +12,7 @@ use App\Models\User;
 use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
@@ -63,13 +64,30 @@ class EmployeeController extends Controller
         // Generate employee ID
         $generatedEmployeeID = $this->generateEmployeeID();
 
-        // Create a user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        $employee = Employee::create(array_merge($data, [
+            'employee_id' => $generatedEmployeeID,
+        ]));
 
+        if (!$employee) {
+            return redirect()->route('employees.create')->with('error', 'Failed to create employee. Please try again.');
+        }
+         // Create a user
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role_id' => null,
+            ]);
+
+         // Assign the 'employee' role to the user
+         $employeeRole = Role::where('name', 'employee')->first();
+
+         if ($employeeRole) {
+             $user->role_id = $employeeRole->id; // Set the role_id
+             $user->save();
+         } else {
+             return redirect()->route('employees.create')->with('error', 'Role not found. Failed to create employee. Please try again.');
+         }
 
         // Handle file uploads (certificate, resume, photo) if provided
         if ($request->hasFile('certificate')) {
@@ -86,14 +104,6 @@ class EmployeeController extends Controller
             $photoPath = $request->file('photo')->store('photos', 'public');
             $data['photo'] = $photoPath;
         }
-
-        // Save the employee data to the database
-        $employee = Employee::create(array_merge($data, [
-            'employee_id' => $generatedEmployeeID,
-            'user_id' => $user->id,
-        ]));
-
-
         return redirect()->route('employees.index')->with('success', 'Employee created successfully')->with('generatedEmployeeID', $generatedEmployeeID);
     }
 
