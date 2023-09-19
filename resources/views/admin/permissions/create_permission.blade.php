@@ -14,16 +14,13 @@
             <select name="group_name" id="group_id" class="border border-gray-300 rounded p-2 w-full" required>
                     <option selected="" disabled="">Select Group</option>
                     <option value="dashboard">Dashboard</option>
+                    <option value="branch">HRM Setup</option>
                     <option value="branch">Branch</option>
                     <option value="department">Department</option>
                     <option value="designation">Designation</option>
                     <option value="employee">Employee</option>
-                    <option value="roll_permission">Roll & Permission</option>
+                    <option value="roll_permission">Role & Permission</option>
                     <option value="users">Users</option>
-                    <option value="branch">Branch</option>
-                    <option value="branch">Branch</option>
-                    <option value="branch">Branch</option>
-                    <option value="branch">Branch</option>
             </select>
         </div>
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Create Permission</button>

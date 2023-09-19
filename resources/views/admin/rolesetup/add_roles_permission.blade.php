@@ -11,8 +11,8 @@
     <form action="{{ route('roles.permission.store') }}" method="POST" class="mt-4">
         @csrf
         <div class="mb-4">
-            <label for="group_name" class="block font-medium">Role Name:</label>
-            <select name="group_name" id="group_id" class="border border-gray-300 rounded p-2 w-full" required>
+            <label for="role_name" class="block font-medium">Role Name:</label>
+            <select name="role_id" id="role_id" class="border border-gray-300 rounded p-2 w-full" required>
                     <option selected="" disabled="">Select Role</option>
                     @foreach ($roles as $role )
                         <option value="{{$role->id}}">{{$role->name}}</option>

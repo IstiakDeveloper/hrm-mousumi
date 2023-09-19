@@ -71,23 +71,22 @@ class EmployeeController extends Controller
         if (!$employee) {
             return redirect()->route('employees.create')->with('error', 'Failed to create employee. Please try again.');
         }
-         // Create a user
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role_id' => null,
-            ]);
 
-         // Assign the 'employee' role to the user
-         $employeeRole = Role::where('name', 'employee')->first();
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
 
-         if ($employeeRole) {
-             $user->role_id = $employeeRole->id; // Set the role_id
-             $user->save();
-         } else {
-             return redirect()->route('employees.create')->with('error', 'Role not found. Failed to create employee. Please try again.');
-         }
+        // Assign the 'employee' role to the user
+        $employeeRole = Role::firstOrCreate(['name' => 'employee']);
+        $user->assignRole($employeeRole);
+
+        if ($request->roles) {
+            $user->assignRole($request->roles);
+        }
+
+
 
         // Handle file uploads (certificate, resume, photo) if provided
         if ($request->hasFile('certificate')) {

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use DB;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
@@ -47,9 +48,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    // public function permissions()
+    // {
+    //     return $this->hasManyThrough(Permission::class, Role::class);
+    // }
+    public function permissions()
+    {
+        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->pluck('name')->unique();
     }
 
     public function hasRole($roleName)

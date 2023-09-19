@@ -78,7 +78,6 @@ class RoleController extends Controller
 
 
     //Roles Function start from here
-
     public function AllRoles(){
         $roles = Role::all();
         return view('admin.roles.all_roles', compact('roles'));
@@ -101,13 +100,10 @@ class RoleController extends Controller
     }
 
     public function UpdateRole(Request $request) {
-
         $per_id = $request->id;
-
         Role::findOrFail($per_id)->update([
             'name' => $request->name,
         ]);
-
         return redirect()->route('role.all');
     }
 
@@ -128,15 +124,22 @@ class RoleController extends Controller
     }
 
     public function StoreRolesPermission(Request $request) {
-        $role = Role::findOrFail($request->group_name);
+        $role_id = $request->role_id; // Use role_id
         $permissions = $request->permission;
 
-        if (!empty($permissions)) {
-            $role->syncPermissions($permissions);
+        foreach ($permissions as $key => $item) {
+            // Assuming each item is a permission ID
+            $data = [
+                'role_id' => $role_id,
+                'permission_id' => $item
+            ];
+
+            DB::table('role_has_permissions')->insert($data);
         }
 
-        return redirect()->route('roles.permission.all');
+        return 'Permissions Created for the Role';
     }
+
 
     public function AllRolesPermission() {
         $roles = Role::all();

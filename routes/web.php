@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 
 /*
@@ -73,9 +74,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('admin/role/delete/{id}', 'AdminDeleteRoles')->name('admin.role.destroy');
 
 
-        // Route::get('import/permission', 'ImportPermission')->name('permission.import');
-        // Route::get('permission/export', 'Export')->name('permission.export');
-        // Route::post('permission/import', 'Import')->name('import');
     });
 
     Route::controller(AdminController::class)->group(function(){
@@ -85,8 +83,9 @@ Route::middleware('auth')->group(function () {
 
 
     });
+    Route::get('/dashboard/roles-permissions', [DashboardController::class, 'showRolesAndPermissions'])->name('dashboard.roles-permissions');
 
-    Route::get('/test-dashboard-permission', [TestController::class, 'testDashboardPermission']);
+
 
 
 });

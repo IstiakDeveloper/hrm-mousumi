@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-semibold">All Roles Permission</h1>
         <div class="flex justify-end">
-            <a href="{{ route('role.create') }}" class="bg-blue-500 text-white py-2 px-4 m-2 rounded hover:bg-blue-600">Create Role</a>
+            <a href="{{route('add.roles.permission')}}" class="bg-blue-500 text-white py-2 px-4 m-2 rounded hover:bg-blue-600">Assign Permission</a>
         </div>
     </div>
     @if (count($roles) > 0)

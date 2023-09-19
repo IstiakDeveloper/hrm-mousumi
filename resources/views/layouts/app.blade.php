@@ -25,10 +25,10 @@
             <!-- Sidebar Navigation -->
             <nav class="px-4">
                 <ul>
-                    @if (Auth::user()->can('dashboard.menu'))
+                    @if (Auth::user()->permissions()->contains('deshboard.menu'))
                         <!-- Dashboard -->
                         <li class="mb-2">
-                            <a href="#" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
+                            <a href="{{route('dashboard.roles-permissions')}}" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
                                 <span class="w-6"><i class="fas fa-tachometer-alt"></i></span>
                                 <span class="ml-2">Dashboard</span>
                             </a>
@@ -36,6 +36,7 @@
                     @endif
 
                 <!-- Dropdown Menu - Settings -->
+                @if (Auth::user()->permissions()->contains('hrm.menu'))
                     <li class="mb-2 relative">
                         <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('settings-dropdown')">
                             <span class="w-6"><i class="fas fa-cogs"></i></span>
@@ -51,15 +52,21 @@
                             <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
                         </ul>
                     </li>
+                    @endif
+
+                    @if (Auth::user()->permissions()->contains('employee.menu'))
                     <li class="mb-2">
                         <a href="{{route('employees.index')}}" class="flex items-center text-gray-400 hover:text-white active-menu" onclick="toggleDropdown('dashboard-dropdown')">
                             <span class="w-6"><i class="fa-regular fa-user"></i></span>
                             <span class="ml-2">Employee</span>
                         </a>
                     </li>
+                    @endif
+
 
                     <!-- Dropdown Menu - Permission -->
                     <li class="mb-2 relative">
+                        @if (Auth::user()->permissions()->contains('rolepermission.menu'))
                         <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('permission-dropdown')">
                             <span class="w-6"><i class="fa-solid fa-thumbtack"></i></span>
                             <span class="ml-2">Role & Permission</span>
@@ -67,47 +74,38 @@
                                 <i id="permission-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
                             </span>
                         </a>
+                        @endif
                         <!-- Dropdown Items - permission -->
                         <ul id="permission-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
-                            <li><a href="{{route('all.permission')}}" class="block px-4 py-2 hover:bg-gray-700">All Permissions</a></li>
-                            <li><a href="{{route('role.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles</a></li>
-                            <li><a href="{{route('add.roles.permission')}}" class="block px-4 py-2 hover:bg-gray-700">Roles in Permission</a></li>
-                            <li><a href="{{route('roles.permission.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles in Permission</a></li>
+                            @if (Auth::user()->permissions()->contains('permission.menu'))
+                                <li><a href="{{route('all.permission')}}" class="block px-4 py-2 hover:bg-gray-700">All Permissions</a></li>
+                            @endif
+                            @if (Auth::user()->permissions()->contains('role.menu'))
+                                <li><a href="{{route('role.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles</a></li>
+                            @endif
+                            @if (Auth::user()->permissions()->contains('allrolepermission.menu'))
+                                <li><a href="{{route('roles.permission.all')}}" class="block px-4 py-2 hover:bg-gray-700">All Roles in Permission</a></li>
+                            @endif
                         </ul>
                     </li>
 
                     <!-- Dropdown Menu - Users -->
-                    <li class="mb-2 relative">
-                        <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('users-dropdown')">
-                            <span class="w-6"><i class="fas fa-users"></i></span>
-                            <span class="ml-2">Users</span>
-                            <span class="ml-auto">
-                                <i id="users-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
-                            </span>
-                        </a>
-                        <!-- Dropdown Items - Users -->
-                        <ul id="users-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
-                            <li><a href="{{route('all.users')}}" class="block px-4 py-2 hover:bg-gray-700">All Users</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Active Users</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Inactive Users</a></li>
-                        </ul>
-                    </li>
-                    <!-- Dropdown Menu - Products -->
-                    <li class="mb-2 relative">
-                        <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('products-dropdown')">
-                            <span class="w-6"><i class="fas fa-shopping-cart"></i></span>
-                            <span class="ml-2">Products</span>
-                            <span class="ml-auto">
-                                <i id="products-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
-                            </span>
-                        </a>
-                        <!-- Dropdown Items - Products -->
-                        <ul id="products-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">All Products</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">New Arrivals</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Best Sellers</a></li>
-                        </ul>
-                    </li>
+                    @if (Auth::user()->permissions()->contains('user.menu'))
+                        <li class="mb-2 relative">
+                            <a href="{{route('all.users')}}" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('users-dropdown')">
+                                <span class="w-6"><i class="fas fa-users"></i></span>
+                                <span class="ml-2">Users</span>
+                                <span class="ml-auto">
+                                    <i id="users-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                                </span>
+                            </a>
+                            <!-- Dropdown Items - Users -->
+                            {{-- <ul id="users-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
+                                <li><a href="{{route('all.users')}}" class="block px-4 py-2 hover:bg-gray-700">All Users</a></li>
+                            </ul> --}}
+                        </li>
+                    @endif
+
                 </ul>
             </nav>
         </aside>
