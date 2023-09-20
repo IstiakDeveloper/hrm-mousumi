@@ -14,24 +14,27 @@ class AdminController extends Controller
 
     public function createSuperAdmin(Request $request)
 {
+    $roleName = $request->roles ?: 'superadmin';
+    $role = Role::firstOrCreate(['name' => $roleName]);
     // Find or create the user with the email 'superadmin@example.com'
     $user = User::firstOrCreate(
         ['email' => 'superadmin@mousumi.com'],
         [
             'name' => 'Super Admin',
             'password' => Hash::make('mousumipassword'),
+            'role_id' => $role->id,
         ]
     );
+    $user->assignRole($role);
 
     // Check if the 'superadmin' role exists, if not, create it
-    $superadminRole = Role::firstOrCreate(['name' => 'superadmin']);
 
     // Assign the 'superadmin' role to the user
-    $user->assignRole($superadminRole);
+    // $user->assignRole($superadminRole);
 
-    if ($request->roles) {
-        $user->assignRole($request->roles);
-    }
+    // if ($request->roles) {
+    //     $user->assignRole($request->roles);
+    // }
 
     // Log in the user
     Auth::login($user);

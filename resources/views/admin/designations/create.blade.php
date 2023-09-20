@@ -19,8 +19,8 @@
             <input type="text" name="name" id="name" class="border border-gray-300 rounded p-2 w-full" required>
         </div>
         <div class="mb-4">
-            <label for="description" class="block font-medium">Description:</label>
-            <textarea name="description" id="description" class="border border-gray-300 rounded p-2 w-full" rows="4"></textarea>
+            <label for="job_description" class="block font-medium">Description:</label>
+            <textarea name="job_description" id="job_description" class="border border-gray-300 rounded p-2 w-full" rows="4"></textarea>
         </div>
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Create Designation</button>
     </form>

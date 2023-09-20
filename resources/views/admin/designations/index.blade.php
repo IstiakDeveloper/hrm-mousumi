@@ -23,7 +23,7 @@
                 <td class="py-2 px-4 text-center">{{ $designation->id }}</td>
                 <td class="py-2 px-4 text-center">{{ $designation->department->name }}</td>
                 <td class="py-2 px-4 text-center">{{ $designation->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $designation->description }}</td>
+                <td class="py-2 px-4 text-center">{{ $designation->job_description }}</td>
                 <td class="py-2 px-4 text-center">
                     <a href="{{ route('designations.show', $designation) }}" class="text-blue-500 hover:underline">View</a>
                     <a href="{{ route('designations.edit', $designation) }}" class="text-yellow-500 hover:underline">Edit</a>
