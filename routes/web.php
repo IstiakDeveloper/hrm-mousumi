@@ -10,7 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\TimesheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,9 +80,9 @@ Route::middleware('auth')->group(function () {
         Route::get('all/users', 'AllUsers')->name('all.users');
         Route::get('add/user/create', 'CreateUser')->name('user.create');
         Route::post('admin/users',  'store')->name('admin.users.store');
-
-
     });
+    Route::resource('timesheets', TimesheetController::class);
+
     Route::get('/dashboard/roles-permissions', [DashboardController::class, 'showRolesAndPermissions'])->name('dashboard.roles-permissions');
 
 

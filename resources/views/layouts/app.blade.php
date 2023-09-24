@@ -35,23 +35,23 @@
                         </li>
                     @endif
 
-                <!-- Dropdown Menu - Settings -->
-                @if (Auth::user()->permissions()->contains('hrm.menu'))
-                    <li class="mb-2 relative">
-                        <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('settings-dropdown')">
-                            <span class="w-6"><i class="fas fa-cogs"></i></span>
-                            <span class="ml-2">HRM Setup</span>
-                            <span class="ml-auto">
-                                <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
-                            </span>
-                        </a>
-                        <!-- Dropdown Items - Settings -->
-                        <ul id="settings-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
-                            <li><a href="{{route('branches.index')}}" class="block px-4 py-2 hover:bg-gray-700">Branches</a></li>
-                            <li><a href="{{route('departments.index')}}" class="block px-4 py-2 hover:bg-gray-700">Department</a></li>
-                            <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
-                        </ul>
-                    </li>
+                <!-- Dropdown Menu - Hrm -->
+                    @if (Auth::user()->permissions()->contains('hrm.menu'))
+                        <li class="mb-2 relative">
+                            <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('settings-dropdown')">
+                                <span class="w-6"><i class="fas fa-cogs"></i></span>
+                                <span class="ml-2">HRM Setup</span>
+                                <span class="ml-auto">
+                                    <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                                </span>
+                            </a>
+                            <!-- Dropdown Items - Settings -->
+                            <ul id="settings-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
+                                <li><a href="{{route('branches.index')}}" class="block px-4 py-2 hover:bg-gray-700">Branches</a></li>
+                                <li><a href="{{route('departments.index')}}" class="block px-4 py-2 hover:bg-gray-700">Department</a></li>
+                                <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
+                            </ul>
+                        </li>
                     @endif
 
                     @if (Auth::user()->permissions()->contains('employee.menu'))
@@ -61,6 +61,25 @@
                             <span class="ml-2">Employee</span>
                         </a>
                     </li>
+                    @endif
+
+                    <!-- Dropdown Menu - Timesheet -->
+                    @if (Auth::user()->permissions()->contains('hrm.menu'))
+                        <li class="mb-2 relative">
+                            <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('timesheet-dropdown')">
+                                <span class="w-6"><i class="fas fa-cogs"></i></span>
+                                <span class="ml-2">Timesheets</span>
+                                <span class="ml-auto">
+                                    <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                                </span>
+                            </a>
+                            <!-- Dropdown Items - Settings -->
+                            <ul id="timesheet-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
+                                <li><a href="{{route('timesheets.index')}}" class="block px-4 py-2 hover:bg-gray-700">Timesheets</a></li>
+                                <li><a href="{{route('departments.index')}}" class="block px-4 py-2 hover:bg-gray-700">Department</a></li>
+                                <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
+                            </ul>
+                        </li>
                     @endif
 
 
