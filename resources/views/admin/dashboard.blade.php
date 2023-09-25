@@ -1,5 +1,7 @@
 <!-- view/admin/dashboard.blade.php -->
+@extends('layouts.app')
 
+@section('content')
 User ID: {{ $user->id }}
 User Name: {{ $user->name }}
 
@@ -16,3 +18,4 @@ User Permissions:
         <li>{{ $permission }}</li>
     @endforeach
 </ul>
+@endsection

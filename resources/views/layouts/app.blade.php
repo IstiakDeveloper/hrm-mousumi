@@ -50,6 +50,7 @@
                                 <li><a href="{{route('branches.index')}}" class="block px-4 py-2 hover:bg-gray-700">Branches</a></li>
                                 <li><a href="{{route('departments.index')}}" class="block px-4 py-2 hover:bg-gray-700">Department</a></li>
                                 <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
+                                <li><a href="{{route('leave_types.index')}}" class="block px-4 py-2 hover:bg-gray-700">Leave Type</a></li>
                             </ul>
                         </li>
                     @endif
@@ -76,8 +77,8 @@
                             <!-- Dropdown Items - Settings -->
                             <ul id="timesheet-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300">
                                 <li><a href="{{route('timesheets.index')}}" class="block px-4 py-2 hover:bg-gray-700">Timesheets</a></li>
-                                <li><a href="{{route('departments.index')}}" class="block px-4 py-2 hover:bg-gray-700">Department</a></li>
-                                <li><a href="{{route('designations.index')}}" class="block px-4 py-2 hover:bg-gray-700">Designation</a></li>
+                                <li><a href="{{route('leave.index')}}" class="block px-4 py-2 hover:bg-gray-700">Leaves</a></li>
+                                <li><a href="{{route('attendances.index')}}" class="block px-4 py-2 hover:bg-gray-700">Attendance</a></li>
                             </ul>
                         </li>
                     @endif

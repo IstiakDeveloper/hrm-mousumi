@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\TimesheetController;
 
 /*
@@ -82,6 +85,9 @@ Route::middleware('auth')->group(function () {
         Route::post('admin/users',  'store')->name('admin.users.store');
     });
     Route::resource('timesheets', TimesheetController::class);
+    Route::resource('leave_types', LeaveTypeController::class);
+    Route::resource('leave', LeaveController::class);
+    Route::resource('attendances', AttendanceController::class);
 
     Route::get('/dashboard/roles-permissions', [DashboardController::class, 'showRolesAndPermissions'])->name('dashboard.roles-permissions');
 

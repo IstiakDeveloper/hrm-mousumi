@@ -46,15 +46,7 @@ class Employee extends Authenticatable
         return $this->hasOne(BankAccount::class);
     }
 
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
 
-    public function leaves()
-    {
-        return $this->hasMany(Leave::class);
-    }
 
     public function salaries()
     {
@@ -65,5 +57,61 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Timesheet::class);
     }
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    /**
+     * Update the yearly leave balance for the employee.
+     *
+     * @param int $leaveTypeId
+     * @param int $days
+     * @return void
+     */
+    public function updateYearlyLeaveBalance($leaveTypeId, $days)
+    {
+        // Fetch the leave type
+        $leaveType = LeaveType::findOrFail($leaveTypeId);
+
+        // Update the yearly leave balance for the specified leave type
+        if ($leaveType->classification === 'Year') {
+            $this->yearly_leave_balance -= $days;
+            $this->save();
+        }
+    }
+
+
+    public function getAvailableLeaveDays()
+    {
+        $leaveTypes = LeaveType::all(); // Get all leave types
+
+        // Calculate total leave taken for each leave type
+        $leaveTakenByType = [];
+        foreach ($leaveTypes as $leaveType) {
+            $totalLeaveTaken = $this->leaves()
+                ->where('leave_type_id', $leaveType->id)
+                ->where('status', 'Approved') // Filter only approved leaves
+                ->sum('total_days');
+            $leaveTakenByType[$leaveType->leave_type] = $totalLeaveTaken;
+        }
+
+        // Calculate available leave days for each leave type
+        $availableLeaveDaysByType = [];
+        foreach ($leaveTypes as $leaveType) {
+            $dayLimit = $leaveType->day;
+            $leaveTaken = $leaveTakenByType[$leaveType->leave_type];
+            $availableLeaveDaysByType[$leaveType->leave_type] = max($dayLimit - $leaveTaken, 0);
+        }
+
+        return $availableLeaveDaysByType;
+    }
+
 }
 

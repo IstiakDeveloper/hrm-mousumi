@@ -11,6 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 use DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\Employee;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'employee_id'
     ];
 
     /**
@@ -47,6 +49,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 
 
 

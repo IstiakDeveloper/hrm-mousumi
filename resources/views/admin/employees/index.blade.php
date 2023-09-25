@@ -19,6 +19,7 @@
                 <th class="py-2 px-4 bg-gray-100">Department</th>
                 <th class="py-2 px-4 bg-gray-100">Designation</th>
                 <th class="py-2 px-4 bg-gray-100">Date of Joining</th>
+                <th class="py-2 px-4 bg-gray-100">Avaiable Leave</th>
                 <th class="py-2 px-4 bg-gray-100">Actions</th>
             </tr>
         </thead>
@@ -32,6 +33,13 @@
                 <td class="py-2 px-4 text-center">{{ $employee->department->name }}</td>
                 <td class="py-2 px-4 text-center">{{ $employee->designation->name }}</td>
                 <td class="py-2 px-4 text-center">{{ $employee->date_of_joining}}</td>
+                <td class="py-2 px-4 text-center">
+                    <ul>
+                        @foreach ($employee->getAvailableLeaveDays() as $leaveTypeId => $availableDays)
+                            <li>{{ $leaveTypeId }}: {{ $availableDays }} days</li>
+                        @endforeach
+                    </ul>
+                </td>
                 <td class="py-2 px-4 text-center">
                     <a href="{{ route('employees.show', $employee) }}" class="text-blue-500 hover:underline">View</a>
                     <a href="{{ route('employees.edit', $employee) }}" class="text-yellow-500 hover:underline">Edit</a>

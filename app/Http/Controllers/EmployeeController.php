@@ -72,21 +72,26 @@ class EmployeeController extends Controller
             return redirect()->route('employees.create')->with('error', 'Failed to create employee. Please try again.');
         }
 
-        $roleName = $request->roles ?: 'employee';  // Default to 'employee' if not specified
+        $roleName = $request->roles ?: 'employee';
 
         // Find or create the role
         $role = Role::firstOrCreate(['name' => $roleName]);
+
+        // Check if employee_id is valid
+        if (!$employee->id) {
+            return "No found emp id";
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role_id' => $role->id,
+            'employee_id' => $employee->id,
         ]);
 
         $user->assignRole($role);
 
-        // Rest of your code...
 
         return redirect()->route('employees.index')->with('success', 'User created successfully.');
 
