@@ -8,7 +8,6 @@ use App\Models\Employee;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
-
 class TimesheetController extends Controller
 {
     public function index()
@@ -28,8 +27,8 @@ class TimesheetController extends Controller
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date',
-            'clock_in' => 'required|date_format:H:i',
-            'clock_out' => 'required|date_format:H:i|after:clock_in',
+            'office_start' => 'required|date_format:H:i',
+            'office_end' => 'required|date_format:H:i|after:office_start',
             'remark' => 'nullable|string|max:255'
         ]);
 
@@ -39,13 +38,13 @@ class TimesheetController extends Controller
                 ->withInput();
         }
 
-        $clockIn = Carbon::parse($request->clock_in);
-        $clockOut = Carbon::parse($request->clock_out);
-        $hoursWorked = $clockOut->diffInHours($clockIn) + ($clockOut->diffInMinutes($clockIn) % 60) / 60;
+        $hoursWorked = $this->calculateHoursWorked($request->office_start, $request->office_end);
 
         Timesheet::create([
             'employee_id' => $request->employee_id,
             'date' => $request->date,
+            'office_start' => $request->office_start,
+            'office_end' => $request->office_end,
             'hours_worked' => $hoursWorked,
             'remark' => $request->remark,
         ]);
@@ -53,10 +52,12 @@ class TimesheetController extends Controller
         return redirect()->route('timesheets.index')->with('success', 'Timesheet entry created successfully.');
     }
 
-    public function show($id)
+    private function calculateHoursWorked($officeStart, $officeEnd)
     {
-        $timesheet = Timesheet::findOrFail($id);
-        return view('admin.timesheets.show', compact('timesheet'));
+        $startTime = Carbon::parse($officeStart);
+        $endTime = Carbon::parse($officeEnd);
+        $hoursWorked = $endTime->diffInHours($startTime) + ($endTime->diffInMinutes($startTime) % 60) / 60;
+        return $hoursWorked;
     }
 
     public function edit($id)
@@ -71,8 +72,8 @@ class TimesheetController extends Controller
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date',
-            'clock_in' => 'required|date_format:H:i',
-            'clock_out' => 'required|date_format:H:i|after:clock_in',
+            'office_start' => 'required|date_format:H:i',
+            'office_end' => 'required|date_format:H:i|after:office_start',
             'remark' => 'nullable|string|max:255'
         ]);
 
@@ -82,14 +83,14 @@ class TimesheetController extends Controller
                 ->withInput();
         }
 
-        $clockIn = Carbon::parse($request->clock_in);
-        $clockOut = Carbon::parse($request->clock_out);
-        $hoursWorked = $clockOut->diffInHours($clockIn) + ($clockOut->diffInMinutes($clockIn) % 60) / 60;
+        $hoursWorked = $this->calculateHoursWorked($request->office_start, $request->office_end);
 
         $timesheet = Timesheet::findOrFail($id);
         $timesheet->update([
             'employee_id' => $request->employee_id,
             'date' => $request->date,
+            'office_start' => $request->office_start,
+            'office_end' => $request->office_end,
             'hours_worked' => $hoursWorked,
             'remark' => $request->remark,
         ]);
@@ -101,6 +102,7 @@ class TimesheetController extends Controller
     {
         $timesheet = Timesheet::findOrFail($id);
         $timesheet->delete();
+
         return redirect()->route('timesheets.index')->with('success', 'Timesheet entry deleted successfully.');
     }
 }

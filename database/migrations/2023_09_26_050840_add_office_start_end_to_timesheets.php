@@ -11,17 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('timesheets', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedBigInteger('employee_id');
-            $table->date('date');
-            $table->decimal('hours_worked', 5, 2);
-            $table->text('remark')->nullable();
-            $table->timestamps();
+        Schema::table('timesheets', function (Blueprint $table) {
             $table->time('office_start')->nullable();
             $table->time('office_end')->nullable();
-
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 
@@ -30,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('timesheets');
+        Schema::table('timesheets', function (Blueprint $table) {
+            $table->dropColumn('office_start');
+            $table->dropColumn('office_end');
+        });
     }
 };

@@ -53,10 +53,6 @@ class Employee extends Authenticatable
         return $this->hasMany(Salary::class);
     }
 
-    public function timesheets()
-    {
-        return $this->hasMany(Timesheet::class);
-    }
 
     public function leaves()
     {
@@ -113,5 +109,15 @@ class Employee extends Authenticatable
         return $availableLeaveDaysByType;
     }
 
+    public function timesheetForDate($date)
+    {
+        // Assuming you have a Timesheet model and the employee has many timesheets
+        return $this->timesheets()->where('date', $date)->first();
+    }
+
+    public function timesheets()
+    {
+        return $this->hasMany(Timesheet::class);
+    }
 }
 

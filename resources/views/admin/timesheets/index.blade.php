@@ -11,6 +11,8 @@
                 <th class="border-b">ID</th>
                 <th class="border-b">Employee</th>
                 <th class="border-b">Date</th>
+                <th class="border-b">Office Start</th>
+                <th class="border-b">Office End</th>
                 <th class="border-b">Hours Worked</th>
                 <th class="border-b">Remark</th>
                 <th class="border-b">Actions</th>
@@ -22,11 +24,17 @@
                     <td class="border text-center">{{ $timesheet->id }}</td>
                     <td class="border text-center">{{ $timesheet->employee->name }}</td>
                     <td class="border text-center">{{ $timesheet->date }}</td>
+                    <td class="border text-center">{{ $timesheet->office_start }}</td>
+                    <td class="border text-center">{{ $timesheet->office_end }}</td>
                     <td class="border text-center">{{ $timesheet->hours_worked }}</td>
                     <td class="border text-center">{{ $timesheet->remark }}</td>
                     <td class="border text-center">
-                        <a href="{{ route('timesheets.show', $timesheet->id) }}" class="text-blue-500">View</a>
                         <a href="{{ route('timesheets.edit', $timesheet->id) }}" class="text-yellow-500 ml-2">Edit</a>
+                        <form class="inline-block" action="{{ route('timesheets.destroy', $timesheet) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:underline" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

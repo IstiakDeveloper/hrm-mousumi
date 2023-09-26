@@ -30,26 +30,20 @@
 
         <!-- Clock In -->
         <div class="mb-4">
-            <label for="clock_in" class="block text-gray-700 text-sm font-bold mb-2">Clock In:</label>
-            <input type="time" name="clock_in" id="clock_in" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            @error('clock_in')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
+            <label for="office_start" class="block text-gray-700 text-sm font-bold mb-2">Clock In:</label>
+            <input type="time" name="office_start" id="office_start" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
         <!-- Clock Out -->
         <div class="mb-4">
-            <label for="clock_out" class="block text-gray-700 text-sm font-bold mb-2">Clock Out:</label>
-            <input type="time" name="clock_out" id="clock_out" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            @error('clock_out')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
+            <label for="office_end" class="block text-gray-700 text-sm font-bold mb-2">Clock Out:</label>
+            <input type="time" name="office_end" id="office_end" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
         <!-- Hours Worked -->
         <div class="mb-4">
             <label for="hours_worked" class="block text-gray-700 text-sm font-bold mb-2">Hours Worked:</label>
-            <input type="number" name="hours_worked" id="hours_worked" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <input type="number" name="hours_worked" id="hours_worked" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled>
             @error('hours_worked')
                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
             @enderror
@@ -68,36 +62,34 @@
     </form>
 </div>
 
-    <script>
-        document.getElementById('clock_out').addEventListener('change', function() {
-            const clockIn = document.getElementById('clock_in').value;
-            const clockOut = this.value;
+<script>
+    document.getElementById('office_end').addEventListener('input', function() {
+        const clockIn = document.getElementById('office_start').value;
+        const clockOut = this.value;
 
-            // Calculate hours worked
-            const hoursWorked = calculateHoursWorked(clockIn, clockOut);
+        // Calculate hours worked
+        const hoursWorked = calculateHoursWorked(clockIn, clockOut);
+        document.getElementById('hours_worked').value = hoursWorked.toFixed(2);
+    });
 
-            // Set the calculated hours worked in the input field
-            document.getElementById('hours_worked').value = hoursWorked;
-        });
+    function calculateHoursWorked(clockIn, clockOut) {
+        const [hoursIn, minutesIn] = clockIn.split(':');
+        const [hoursOut, minutesOut] = clockOut.split(':');
 
-        function calculateHoursWorked(clockIn, clockOut) {
-            const [hoursIn, minutesIn] = clockIn.split(':');
-            const [hoursOut, minutesOut] = clockOut.split(':');
+        // Calculate the difference in hours
+        let hours = hoursOut - hoursIn;
+        let minutes = minutesOut - minutesIn;
 
-            // Calculate the difference in hours
-            let hours = hoursOut - hoursIn;
-            let minutes = minutesOut - minutesIn;
-
-            // Convert negative minutes to negative hours
-            if (minutes < 0) {
-                hours--;
-                minutes += 60;
-            }
-
-            // Calculate the final hours worked
-            const hoursWorked = hours + minutes / 60;
-            return hoursWorked.toFixed(2);
+        // Convert negative minutes to negative hours
+        if (minutes < 0) {
+            hours--;
+            minutes += 60;
         }
-    </script>
+
+        // Calculate the final hours worked
+        const hoursWorked = hours + minutes / 60;
+        return hoursWorked.toFixed(2);
+    }
+</script>
 
 @endsection

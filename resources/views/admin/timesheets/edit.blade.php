@@ -12,31 +12,39 @@
             <label for="employee_id" class="block text-gray-700 text-sm font-bold mb-2">Employee:</label>
             <select name="employee_id" id="employee_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 @foreach ($employees as $employee)
-                <option value="{{ $employee->id }}" {{ $timesheet->employee_id == $employee->id ? 'selected' : '' }}>{{ $employee->name }}</option>
+                    <option value="{{ $employee->id }}" {{ $timesheet->employee_id == $employee->id ? 'selected' : '' }}>
+                        {{ $employee->name }}
+                    </option>
                 @endforeach
             </select>
+            @error('employee_id')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Date -->
         <div class="mb-4">
             <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date:</label>
             <input type="date" name="date" id="date" value="{{ $timesheet->date }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-
-        <!-- Clock In -->
-        <div class="mb-4">
-            <label for="clock_in" class="block text-gray-700 text-sm font-bold mb-2">Clock In:</label>
-            <input type="time" name="clock_in" id="clock_in" value="{{ $timesheet->clock_in }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            @error('clock_in')
+            @error('date')
                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- Clock Out -->
+        <!-- Office Start -->
         <div class="mb-4">
-            <label for="clock_out" class="block text-gray-700 text-sm font-bold mb-2">Clock Out:</label>
-            <input type="time" name="clock_out" id="clock_out" value="{{ $timesheet->clock_out }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            @error('clock_out')
+            <label for="office_start" class="block text-gray-700 text-sm font-bold mb-2">Office Start:</label>
+            <input type="time" name="office_start" id="office_start" value="{{ $timesheet->office_start }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            @error('office_start')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Office End -->
+        <div class="mb-4">
+            <label for="office_end" class="block text-gray-700 text-sm font-bold mb-2">Office End:</label>
+            <input type="time" name="office_end" id="office_end" value="{{ $timesheet->office_end }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            @error('office_end')
                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
             @enderror
         </div>
@@ -54,42 +62,12 @@
         <div class="mb-4">
             <label for="remark" class="block text-gray-700 text-sm font-bold mb-2">Remark:</label>
             <textarea name="remark" id="remark" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ $timesheet->remark }}</textarea>
+            @error('remark')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
     </form>
 </div>
-
-<script>
-    document.getElementById('clock_out').addEventListener('change', function() {
-        const clockIn = document.getElementById('clock_in').value;
-        const clockOut = this.value;
-
-        // Calculate hours worked
-        const hoursWorked = calculateHoursWorked(clockIn, clockOut);
-
-        // Set the calculated hours worked in the input field
-        document.getElementById('hours_worked').value = hoursWorked;
-    });
-
-    function calculateHoursWorked(clockIn, clockOut) {
-        const [hoursIn, minutesIn] = clockIn.split(':');
-        const [hoursOut, minutesOut] = clockOut.split(':');
-
-        // Calculate the difference in hours
-        let hours = hoursOut - hoursIn;
-        let minutes = minutesOut - minutesIn;
-
-        // Convert negative minutes to negative hours
-        if (minutes < 0) {
-            hours--;
-            minutes += 60;
-        }
-
-        // Calculate the final hours worked
-        const hoursWorked = hours + minutes / 60;
-        return hoursWorked.toFixed(2);
-    }
-</script>
 @endsection

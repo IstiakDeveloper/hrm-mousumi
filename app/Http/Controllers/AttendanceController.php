@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Timesheet;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
+
     public function index()
     {
         $attendances = Attendance::all();
@@ -17,80 +20,110 @@ class AttendanceController extends Controller
     public function create()
     {
         $user = auth()->user();
+
         if (!$user->employee) {
-            flash()->error('You are not an employee');
-            return redirect()->back();
+            flash()->error('You are not an employee.');
+            return redirect()->back()->with('error', 'You are not an employee');
         }
 
         $employeeId = $user->employee->id;
 
-        return view('admin.attendances.create', compact('employeeId'));
+        // Get the timesheet data for the current employee
+        $timesheet = Timesheet::where('employee_id', $employeeId)->first();
+
+        return view('admin.attendances.create', compact('employeeId', 'timesheet'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
+            'date' => 'required|date',
             'status' => 'required|in:Present,Absent',
+            'clock_in' => $request->status == 'Present' ? 'required|date_format:H:i:s' : 'nullable|date_format:H:i:s',
+            'clock_out' => $request->status == 'Present' ? 'required|date_format:H:i:s' : 'nullable|date_format:H:i:s',
         ]);
 
-        $data = $request->all();
+        $attendance = new Attendance();
+        $attendance->employee_id = $request->employee_id;
+        $attendance->date = $request->date;
+        $attendance->status = $request->status;
+        $attendance->clock_in = $request->clock_in;
+        $attendance->clock_out = $request->clock_out;
 
-        // Assuming clock_in and clock_out are provided only when the status is 'Present'
-        if ($request->status == 'Present') {
-            $request->validate([
-                'clock_in' => 'required|date_format:H:i:s',
-                'clock_out' => 'required|date_format:H:i:s',
-            ]);
+        if ($request->status == 'Present' && $request->clock_in && $request->clock_out) {
+            $timesheet = Timesheet::where('employee_id', $request->employee_id)->first();
 
-            // Calculate overtime, late minutes, and early leaving minutes here based on your logic
-            // For demonstration purposes, assuming 0 for these fields
-            $data['late_minutes'] = 0;
-            $data['early_leaving_minutes'] = 0;
-            $data['overtime_minutes'] = 0;
+            if ($timesheet) {
+                $attendance->late_minutes = max(0, $this->calculateLateMinutes($timesheet->office_start, $request->clock_in));
+                $attendance->early_leaving_minutes = max(0, $this->calculateEarlyLeavingMinutes($timesheet->office_end, $request->clock_out));
+                $attendance->overtime_minutes = max(0, $this->calculateOvertimeMinutes($timesheet->office_start, $timesheet->office_end, $request->clock_out));
+            }
+        } else {
+            $attendance->late_minutes = 0;
+            $attendance->early_leaving_minutes = 0;
+            $attendance->overtime_minutes = 0;
         }
 
-        Attendance::create($data);
+        $attendance->save();
 
         return redirect()->route('attendances.index')->with('success', 'Attendance record created successfully.');
     }
 
-    public function show($id)
+
+    private function calculateLateMinutes($officeStart, $clockIn)
     {
-        $attendance = Attendance::find($id);
-        return view('admin.attendances.show', compact('attendance'));
+        if (!$officeStart || !$clockIn) {
+            return 0;
+        }
+
+        // Convert times to Carbon instances for easier calculations
+        $officeStartTime = Carbon::parse($officeStart);
+        $clockInTime = Carbon::parse($clockIn);
+
+        // Calculate late minutes
+        $lateMinutes = $clockInTime->diffInMinutes($officeStartTime, false);
+
+        // If clock in is earlier than office start time, consider it as on time (0 late minutes)
+        return max(0, $lateMinutes);
     }
 
-    public function edit($id)
+    private function calculateEarlyLeavingMinutes($officeEnd, $clockOut)
     {
-        $attendance = Attendance::find($id);
-        return view('admin.attendances.edit', compact('attendance'));
+        if (!$officeEnd || !$clockOut) {
+            return 0;
+        }
+
+        // Convert times to Carbon instances for easier calculations
+        $officeEndTime = Carbon::parse($officeEnd);
+        $clockOutTime = Carbon::parse($clockOut);
+
+        // Calculate early leaving minutes
+        $earlyLeavingMinutes = $clockOutTime->diffInMinutes($officeEndTime, false);
+
+        // If clock out is later than office end time, consider it as on time (0 early leaving minutes)
+        return max(0, $earlyLeavingMinutes);
     }
 
-    public function update(Request $request, $id)
+    private function calculateOvertimeMinutes($officeStart, $officeEnd, $clockOut)
     {
-        $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'date' => 'required|date',
-            'status' => 'required|in:Present,Absent',
-            'clock_in' => 'nullable|date_format:H:i:s',
-            'clock_out' => 'nullable|date_format:H:i:s',
-            'late_minutes' => 'nullable|integer',
-            'early_leaving_minutes' => 'nullable|integer',
-            'overtime_minutes' => 'nullable|integer',
-        ]);
+        if (!$officeStart || !$officeEnd || !$clockOut) {
+            return 0;
+        }
 
-        $attendance = Attendance::find($id);
-        $attendance->update($request->all());
+        $officeStartTime = Carbon::parse($officeStart);
+        $officeEndTime = Carbon::parse($officeEnd);
+        $clockOutTime = Carbon::parse($clockOut);
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance record updated successfully.');
+        $overtimeMinutes = max(0, $clockOutTime->diffInMinutes($officeEndTime, false));
+
+        // If clock out is earlier than office start time, consider it as on time (0 overtime minutes)
+        if ($overtimeMinutes > 0) {
+            $overtimeMinutes = max(0, $clockOutTime->diffInMinutes($officeStartTime, false));
+        }
+
+        return $overtimeMinutes;
     }
 
-    public function destroy($id)
-    {
-        $attendance = Attendance::find($id);
-        $attendance->delete();
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance record deleted successfully.');
-    }
 }
