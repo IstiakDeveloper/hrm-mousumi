@@ -68,7 +68,7 @@
                     @if (Auth::user()->permissions()->contains('hrm.menu'))
                         <li class="mb-2 relative">
                             <a href="#" class="flex items-center text-gray-400 hover:text-white" onclick="toggleDropdown('timesheet-dropdown')">
-                                <span class="w-6"><i class="fas fa-cogs"></i></span>
+                                <span class="w-6"><i class="fa-solid fa-clock"></i></span>
                                 <span class="ml-2">Timesheets</span>
                                 <span class="ml-auto">
                                     <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>

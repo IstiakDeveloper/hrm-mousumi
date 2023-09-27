@@ -7,24 +7,24 @@
         <a href="{{ route('branches.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Branch</a>
     </div>
     @if (count($branches) > 0)
-    <table class="min-w-full">
+    <table class="min-w-full bg-white border border-gray-300">
         <thead>
             <tr>
-                <th class="py-2 px-4 bg-gray-100">ID</th>
-                <th class="py-2 px-4 bg-gray-100">Name</th>
-                <th class="py-2 px-4 bg-gray-100">Address</th>
-                <th class="py-2 px-4 bg-gray-100">Contact Information</th>
-                <th class="py-2 px-4 bg-gray-100">Actions</th>
+                <th class="py-2 px-4 border-b">ID</th>
+                <th class="py-2 px-4 border-b">Name</th>
+                <th class="py-2 px-4 border-b">Address</th>
+                <th class="py-2 px-4 border-b">Contact Information</th>
+                <th class="py-2 px-4 border-b">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($branches as $branch)
             <tr>
-                <td class="py-2 px-4 text-center">{{ $branch->id }}</td>
-                <td class="py-2 px-4 text-center">{{ $branch->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $branch->address }}</td>
-                <td class="py-2 px-4 text-center">{{ $branch->contact_information }}</td>
-                <td class="py-2 px-4 text-center">
+                <td class="py-2 px-4 text-center border-b">{{ $branch->id }}</td>
+                <td class="py-2 px-4 text-center border-b">{{ $branch->name }}</td>
+                <td class="py-2 px-4 text-center border-b">{{ $branch->address }}</td>
+                <td class="py-2 px-4 text-center border-b">{{ $branch->contact_information }}</td>
+                <td class="py-2 px-4 text-center border-b">
                     <a href="{{ route('branches.show', $branch->id) }}" class="text-blue-500 hover:underline">View</a>
                     <a href="{{ route('branches.edit', $branch->id) }}" class="text-yellow-500 hover:underline">Edit</a>
                     <form class="inline-block" action="{{ route('branches.destroy', $branch->id) }}" method="POST">

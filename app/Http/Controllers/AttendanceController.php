@@ -10,10 +10,20 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-
     public function index()
     {
-        $attendances = Attendance::all();
+        $user = auth()->user();
+
+        // Check if the user is an employee
+        if ($user->employee) {
+            // If the user is an employee, fetch their attendance data
+            $employeeId = $user->employee->id;
+            $attendances = Attendance::where('employee_id', $employeeId)->get();
+        } else {
+            // If the user is not an employee (e.g., admin), fetch all attendance data
+            $attendances = Attendance::all();
+        }
+
         return view('admin.attendances.index', compact('attendances'));
     }
 
@@ -44,86 +54,22 @@ class AttendanceController extends Controller
             'clock_out' => $request->status == 'Present' ? 'required|date_format:H:i:s' : 'nullable|date_format:H:i:s',
         ]);
 
+        // Convert the input to integers if they are not null
+        $lateMinutes = $request->late_minutes !== null ? (int)$request->late_minutes : 0;
+        $earlyLeavingMinutes = $request->early_leaving_minutes !== null ? (int)$request->early_leaving_minutes : 0;
+
         $attendance = new Attendance();
         $attendance->employee_id = $request->employee_id;
         $attendance->date = $request->date;
         $attendance->status = $request->status;
         $attendance->clock_in = $request->clock_in;
         $attendance->clock_out = $request->clock_out;
-
-        if ($request->status == 'Present' && $request->clock_in && $request->clock_out) {
-            $timesheet = Timesheet::where('employee_id', $request->employee_id)->first();
-
-            if ($timesheet) {
-                $attendance->late_minutes = max(0, $this->calculateLateMinutes($timesheet->office_start, $request->clock_in));
-                $attendance->early_leaving_minutes = max(0, $this->calculateEarlyLeavingMinutes($timesheet->office_end, $request->clock_out));
-                $attendance->overtime_minutes = max(0, $this->calculateOvertimeMinutes($timesheet->office_start, $timesheet->office_end, $request->clock_out));
-            }
-        } else {
-            $attendance->late_minutes = 0;
-            $attendance->early_leaving_minutes = 0;
-            $attendance->overtime_minutes = 0;
-        }
+        $attendance->late_minutes = $lateMinutes;
+        $attendance->early_leaving_minutes = $earlyLeavingMinutes;
+        $attendance->overtime_minutes = $request->overtime_minutes ?? 0;
 
         $attendance->save();
 
         return redirect()->route('attendances.index')->with('success', 'Attendance record created successfully.');
     }
-
-
-    private function calculateLateMinutes($officeStart, $clockIn)
-    {
-        if (!$officeStart || !$clockIn) {
-            return 0;
-        }
-
-        // Convert times to Carbon instances for easier calculations
-        $officeStartTime = Carbon::parse($officeStart);
-        $clockInTime = Carbon::parse($clockIn);
-
-        // Calculate late minutes
-        $lateMinutes = $clockInTime->diffInMinutes($officeStartTime, false);
-
-        // If clock in is earlier than office start time, consider it as on time (0 late minutes)
-        return max(0, $lateMinutes);
-    }
-
-    private function calculateEarlyLeavingMinutes($officeEnd, $clockOut)
-    {
-        if (!$officeEnd || !$clockOut) {
-            return 0;
-        }
-
-        // Convert times to Carbon instances for easier calculations
-        $officeEndTime = Carbon::parse($officeEnd);
-        $clockOutTime = Carbon::parse($clockOut);
-
-        // Calculate early leaving minutes
-        $earlyLeavingMinutes = $clockOutTime->diffInMinutes($officeEndTime, false);
-
-        // If clock out is later than office end time, consider it as on time (0 early leaving minutes)
-        return max(0, $earlyLeavingMinutes);
-    }
-
-    private function calculateOvertimeMinutes($officeStart, $officeEnd, $clockOut)
-    {
-        if (!$officeStart || !$officeEnd || !$clockOut) {
-            return 0;
-        }
-
-        $officeStartTime = Carbon::parse($officeStart);
-        $officeEndTime = Carbon::parse($officeEnd);
-        $clockOutTime = Carbon::parse($clockOut);
-
-        $overtimeMinutes = max(0, $clockOutTime->diffInMinutes($officeEndTime, false));
-
-        // If clock out is earlier than office start time, consider it as on time (0 overtime minutes)
-        if ($overtimeMinutes > 0) {
-            $overtimeMinutes = max(0, $clockOutTime->diffInMinutes($officeStartTime, false));
-        }
-
-        return $overtimeMinutes;
-    }
-
-
 }
