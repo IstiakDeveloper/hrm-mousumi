@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('leave', LeaveController::class);
     Route::resource('attendances', AttendanceController::class);
 
-    Route::get('/dashboard/roles-permissions', [DashboardController::class, 'showRolesAndPermissions'])->name('dashboard.roles-permissions');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 
