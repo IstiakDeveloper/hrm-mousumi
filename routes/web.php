@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\Payroll\AllowanceOptionController;
+use App\Http\Controllers\Payroll\DeductionOptionController;
+use App\Http\Controllers\Payroll\LoanOptionController;
+use App\Http\Controllers\Payroll\PayslipTypeController;
 use App\Http\Controllers\TimesheetController;
 
 /*
@@ -88,6 +92,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('leave_types', LeaveTypeController::class);
     Route::resource('leave', LeaveController::class);
     Route::resource('attendances', AttendanceController::class);
+    Route::resource('allowance_options', AllowanceOptionController::class);
+    Route::resource('deduction_options', DeductionOptionController::class);
+    Route::resource('loan_options', LoanOptionController::class);
+    Route::resource('payslip_types', PayslipTypeController::class);
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

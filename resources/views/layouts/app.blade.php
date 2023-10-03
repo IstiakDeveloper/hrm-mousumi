@@ -71,6 +71,10 @@
                         <li><a href="{{ route('departments.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('departments.*') ? 'active-menu' : '' }}">Department</a></li>
                         <li><a href="{{ route('designations.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('designations.*') ? 'active-menu' : '' }}">Designation</a></li>
                         <li><a href="{{ route('leave_types.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('leave_types.*') ? 'active-menu' : '' }}">Leave Type</a></li>
+                        <li><a href="{{ route('payslip_types.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('payslip_types.*') ? 'active-menu' : '' }}">Payslip Type</a></li>
+                        <li><a href="{{ route('allowance_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('allowance_options.*') ? 'active-menu' : '' }}">Allowance Option</a></li>
+                        <li><a href="{{ route('deduction_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('deduction_options.*') ? 'active-menu' : '' }}">Deduction Option</a></li>
+                        <li><a href="{{ route('loan_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('loan_options.*') ? 'active-menu' : '' }}">Loan Option</a></li>
                     </ul>
                 </li>
 
@@ -126,7 +130,7 @@
             </ul>
         </nav>
 
-        <div class="absolute bottom-0 w-full text-center py-4">
+        <div class="mt-16 +w-full text-center py-4">
             <!-- Default Avatar Placeholder -->
             <div class="flex justify-center mb-2">
                 <div class="bg-gray-300 rounded-full w-12 h-12 flex items-center justify-center">
@@ -142,8 +146,7 @@
     </aside>
 
     <!-- Content Area -->
-    <main class="ml-64 p-6">
-        <!-- Page Content Goes Here -->
+    <main class="ml-72 p-6">
         @yield('content')
     </main>
 
