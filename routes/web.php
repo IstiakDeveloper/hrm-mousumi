@@ -8,7 +8,6 @@ use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaveController;
@@ -17,6 +16,7 @@ use App\Http\Controllers\Payroll\AllowanceOptionController;
 use App\Http\Controllers\Payroll\DeductionOptionController;
 use App\Http\Controllers\Payroll\LoanOptionController;
 use App\Http\Controllers\Payroll\PayslipTypeController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\TimesheetController;
 
 /*
@@ -96,6 +96,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('deduction_options', DeductionOptionController::class);
     Route::resource('loan_options', LoanOptionController::class);
     Route::resource('payslip_types', PayslipTypeController::class);
+
+    Route::get('/salary', [SalaryController::class, 'index'])->name('salary.index');
+    Route::get('/salary/{employeeId}/set', [SalaryController::class, 'showSetSalaryForm'])->name('salary.showSetSalaryForm');
+    Route::post('/salary/{employeeId}/set', [SalaryController::class, 'setSalary'])->name('salary.setSalary');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

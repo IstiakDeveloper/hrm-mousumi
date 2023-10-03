@@ -9,4 +9,8 @@ class DeductionOption extends Model
 {
     use HasFactory;
     protected $fillable = ['deduction_option'];
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class);
+    }
 }

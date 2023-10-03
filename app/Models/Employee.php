@@ -46,14 +46,6 @@ class Employee extends Authenticatable
         return $this->hasOne(BankAccount::class);
     }
 
-
-
-    public function salaries()
-    {
-        return $this->hasMany(Salary::class);
-    }
-
-
     public function leaves()
     {
         return $this->hasMany(Leave::class);
@@ -118,6 +110,10 @@ class Employee extends Authenticatable
     public function timesheets()
     {
         return $this->hasMany(Timesheet::class);
+    }
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class);
     }
 }
 

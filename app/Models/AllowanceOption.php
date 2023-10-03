@@ -9,4 +9,8 @@ class AllowanceOption extends Model
 {
     use HasFactory;
     protected $fillable = ['allowance_option'];
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class);
+    }
 }

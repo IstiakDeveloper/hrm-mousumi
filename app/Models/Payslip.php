@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PayslipType extends Model
+class Payslip extends Model
 {
     use HasFactory;
-    protected $fillable = ['payslip_type'];
-    public function salaries()
+    public function payslipType()
     {
-        return $this->hasMany(Salary::class);
+        return $this->belongsTo(PayslipType::class);
     }
 }
