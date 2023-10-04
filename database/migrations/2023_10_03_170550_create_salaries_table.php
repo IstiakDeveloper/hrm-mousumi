@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreign('deduction_option_id')->references('id')->on('deduction_options')->onDelete('set null');
             $table->unsignedBigInteger('payslip_type_id')->nullable();
             $table->foreign('payslip_type_id')->references('id')->on('payslip_types')->onDelete('set null');
-            $table->string('name');
             $table->decimal('salary', 10, 2)->nullable();
             $table->decimal('net_salary', 10, 2)->nullable();
             $table->timestamps();

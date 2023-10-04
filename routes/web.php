@@ -100,6 +100,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/salary', [SalaryController::class, 'index'])->name('salary.index');
     Route::get('/salary/{employeeId}/set', [SalaryController::class, 'showSetSalaryForm'])->name('salary.showSetSalaryForm');
     Route::post('/salary/{employeeId}/set', [SalaryController::class, 'setSalary'])->name('salary.setSalary');
+    Route::delete('/salary/{id}/payslip', [SalaryController::class, 'deletePayslip'])->name('delete_payslip');
+    Route::delete('/salary/{id}/allowance', [SalaryController::class, 'deleteAllowance'])->name('delete_allowance');
+    Route::delete('/salary/{id}/loan', [SalaryController::class, 'deleteLoan'])->name('delete_loan');
+
+    Route::post('/salary/{employeeId}/create-payslip', [SalaryController::class, 'createPayslip'])->name('salary.createPayslip');
+    Route::post('/salary/{employeeId}/create-allowance', [SalaryController::class, 'createAllowance'])->name('salary.createAllowance');
+    Route::post('/salary/{employeeId}/create-loan', [SalaryController::class, 'createLoan'])->name('salary.createLoan');
+    Route::post('/salary/{employeeId}/create-deduction', [SalaryController::class, 'createDeduction'])->name('salary.createDeduction');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

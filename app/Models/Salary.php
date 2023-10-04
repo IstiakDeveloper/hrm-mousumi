@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Salary extends Model
 {
     use HasFactory;
-    protected $fillable = ['employee_id', 'allowance_option_id', 'loan_option_id', 'deduction_option_id', 'payslip_type_id', 'name', 'salary', 'net_salary'];
+    protected $fillable = ['employee_id', 'allowance_option_id', 'loan_option_id', 'deduction_option_id', 'payslip_type_id', 'salary', 'net_salary'];
 
     public function employee()
     {

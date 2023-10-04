@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Loan extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'type', 'loan_amount'];
+    protected $fillable = ['title', 'type', 'loan_amount', 'employee_id', 'loan_option_id'];
 
     public function loanOption()
     {
-        return $this->belongsTo(LoanOption::class);
+        return $this->belongsTo(LoanOption::class, 'loan_option_id');
+    }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
     }
 }

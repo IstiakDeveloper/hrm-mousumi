@@ -115,5 +115,17 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Salary::class);
     }
+    public function payslips()
+    {
+        return $this->hasMany(Payslip::class);
+    }
+    public function allowances()
+    {
+        return $this->hasMany(Allowance::class);
+    }
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }
 
