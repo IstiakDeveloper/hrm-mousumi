@@ -107,20 +107,46 @@
     </div>
 
     <div class="flex flex-wrap mb-6">
+
         <!-- Deduction Option -->
         <div class="w-full md:w-1/2 px-3 mb-6">
             <h3 class="text-xl font-bold mb-3">Deductions</h3>
             <button class="btn btn-primary mb-3" onclick="toggleModal('deductionModal')">Create Deduction</button>
-            <ul>
-                @if ($employee->deductions && $employee->deductions()->count() > 0)
-                    <!-- Display existing deductions -->
-                    @foreach($employee->deductions as $deduction)
-                        <li>{{ $deduction->deduction_option->name }} - {{ $deduction->amount }}</li>
-                    @endforeach
-                @else
-                    <p>No deductions available for this employee.</p>
-                @endif
-            </ul>
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4">Deduction Option</th>
+                        <th class="py-2 px-4">Title</th>
+                        <th class="py-2 px-4">Type</th>
+                        <th class="py-2 px-4">Amount</th>
+                        <th class="py-2 px-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($employee->deductions && count($employee->deductions) > 0)
+                        @foreach($employee->deductions as $deduction)
+                            <tr>
+                                <td class="text-center py-2 px-4">{{ $deduction->deductionOption->deduction_option }}</td>
+                                <td class="text-center py-2 px-4">{{ $deduction->title }}</td>
+                                <td class="text-center py-2 px-4">{{ $deduction->type }}</td>
+                                <td class="text-center py-2 px-4">{{ $deduction->deduction_amount }}</td>
+                                <td class="text-center py-2 px-4">
+                                    <!-- Delete button to remove the deduction -->
+                                    <form action="{{ route('delete_deduction', ['id' => $deduction->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this deduction?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td class="text-center py-2 px-4" colspan="5">No deductions available for this employee.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
 
         <!-- Loan Option -->
@@ -139,27 +165,27 @@
                 </thead>
                 <tbody>
                     @if ($employee->loans && $employee->loans()->count() > 0)
-                        @foreach($employee->loans as $loan)
-                            <tr>
-                                <td class="text-center py-2 px-4">{{ optional($loan->loanOption)->loan_option }}</td>
-                                <td class="text-center py-2 px-4">{{ $loan->title }}</td>
-                                <td class="text-center py-2 px-4">{{ $loan->type }}</td>
-                                <td class="text-center py-2 px-4">{{ $loan->loan_amount }}</td>
-                                <td class="text-center py-2 px-4">
-                                    <!-- Delete button to remove the loan -->
-                                    <form action="{{ route('delete_loan', ['id' => $loan->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this loan?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
+                    @foreach($employee->loans as $loan)
+                        <tr>
+                            <td class="text-center py-2 px-4">{{ optional($loan->loanOption)->loan_option }}</td>
+                            <td class="text-center py-2 px-4">{{ $loan->title }}</td>
+                            <td class="text-center py-2 px-4">{{ $loan->type }}</td>
+                            <td class="text-center py-2 px-4">{{ $loan->loan_amount }}</td>
+                            <td class="text-center py-2 px-4">
+                                <!-- Delete button to remove the loan -->
+                                <form action="{{ route('delete_loan', ['id' => $loan->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this loan?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                @endforeach
+                @else
                         <tr>
                             <td class="text-center py-2 px-4" colspan="5">No loans available for this employee.</td>
                         </tr>
-                    @endif
+                @endif
                 </tbody>
             </table>
         </div>
@@ -234,7 +260,7 @@
                 </div>
 
 
-
+                <!-- Allowance Modal -->
                 <div id="allowanceModal" class="modal fixed hidden inset-0 flex items-center justify-center z-50">
                     <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
                     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
@@ -305,102 +331,123 @@
                 </div>
 
 
+              <!-- Deduction Modal -->
+                <div id="deductionModal" class="modal fixed hidden inset-0 flex items-center justify-center z-50">
+                    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+                    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                        <div class="modal-content py-4 text-left px-6">
+                            <div class="flex justify-between items-center pb-3">
+                                <p class="text-2xl font-bold">Create Deduction</p>
+                                <button onclick="toggleModal('deductionModal')" class="modal-close">
+                                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                        <path d="M6.293 6.293a1 1 0 011.414 0L9 7.586l1.293-1.293a1 1 0 111.414 1.414L10.414 9l1.293 1.293a1 1 0 11-1.414 1.414L9 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L7.586 9 6.293 7.707a1 1 0 010-1.414z"/>
+                                    </svg>
+                                </button>
+                            </div>
 
-    <!-- Deduction Modal -->
-    <div id="deductionModal" class="modal fixed hidden inset-0 flex items-center justify-center z-50">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-            <div class="modal-content py-4 text-left px-6">
-                <div class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Create Deduction</p>
-                    <button onclick="toggleModal('deductionModal')" class="modal-close">
-                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M6.293 6.293a1 1 0 011.414 0L9 7.586l1.293-1.293a1 1 0 111.414 1.414L10.414 9l1.293 1.293a1 1 0 11-1.414 1.414L9 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L7.586 9 6.293 7.707a1 1 0 010-1.414z"/>
-                        </svg>
-                    </button>
-                </div>
+                            <!-- Modal body for Deduction -->
+                            <form id="deductionForm" action="{{ route('salary.createDeduction', ['employeeId' => $employee->id]) }}" method="POST">
+                                @csrf
+                                <div class="flex flex-col space-y-2">
+                                    <label for="deduction_option">Deduction Option:</label>
+                                    <select id="deduction_option" name="deduction_option_id" class="border rounded p-2" required>
+                                        <option value="" disabled selected>Select Deduction Option</option>
+                                        @foreach($deductionOptions as $option)
+                                            <option value="{{ $option->id }}">{{ $option->deduction_option }}</option>
+                                        @endforeach
+                                    </select>
 
-                <!-- Modal body for Deduction -->
-                <div class="flex flex-col space-y-2">
-                    <label for="deduction_name">Deduction Name:</label>
-                    <input type="text" id="deduction_name" class="border rounded p-2">
+                                    <label for="title">Title:</label>
+                                    <input type="text" id="title" name="title" class="border rounded p-2" required>
 
-                    <label for="deduction_amount">Amount:</label>
-                    <input type="text" id="deduction_amount" class="border rounded p-2">
+                                    <label for="type">Type:</label>
+                                    <input type="text" id="type" name="type" class="border rounded p-2" required>
 
-                    <label for="deduction_option">Deduction Option:</label>
-                    <select id="deduction_option" class="border rounded p-2">
-                        <!-- Add options dynamically based on your data -->
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <!-- Add more options as needed -->
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
+                                    <label for="deduction_amount">Amount:</label>
+                                    <input type="number" step="0.01" id="deduction_amount" name="deduction_amount" class="border rounded p-2" required>
+                                </div>
 
-    <!--Loan Modal -->
-    <div id="loanModal" class="modal fixed hidden inset-0 flex items-center justify-center z-50">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-            <div class="modal-content py-4 text-left px-6">
-                <div class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Create Loan</p>
-                    <button onclick="toggleModal('loanModal')" class="modal-close">
-                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M6.293 6.293a1 1 0 011.414 0L9 7.586l1.293-1.293a1 1 0 111.414 1.414L10.414 9l1.293 1.293a1 1 0 11-1.414 1.414L9 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L7.586 9 6.293 7.707a1 1 0 010-1.414z"/>
-                        </svg>
-                    </button>
-                </div>
+                                <button type="submit" class="btn btn-primary mt-4">Create Deduction</button>
+                            </form>
 
-                <!-- Modal body for Loan -->
-                <form id="loanForm" action="{{ route('salary.createLoan', ['employeeId' => $employee->id]) }}" method="POST">
-                    @csrf
-                    <div class="flex flex-col space-y-2">
-                        <label for="loan_option_id">Loan Option:</label>
-                        <select id="loan_option_id" name="loan_option_id" class="border rounded p-2" required>
-                            <option value="" disabled selected>Select Loan Option</option>
-                            @foreach($loanOptions as $loanOption)
-                                <option value="{{ $loanOption->id }}">{{ $loanOption->loan_option }}</option>
-                            @endforeach
-                        </select>
-
-                        <label for="title">Title:</label>
-                        <input type="text" id="title" name="title" class="border rounded p-2" required>
-
-                        <label for="type">Type:</label>
-                        <input type="text" id="type" name="type" class="border rounded p-2" required>
-
-                        <label for="loan_amount">Loan Amount:</label>
-                        <input type="number" step="0.01" id="loan_amount" name="loan_amount" class="border rounded p-2" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mt-4">Create Loan</button>
-                </form>
-
-                @if ($errors->any())
-                    <div class="mt-4">
-                        <div class="text-red-500 text-sm">
-                            Please correct the following errors:
+                            @if ($errors->any())
+                                <div class="mt-4">
+                                    <div class="text-red-500 text-sm">
+                                        Please correct the following errors:
+                                    </div>
+                                    <ul class="list-disc list-inside">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
                     </div>
-                @endif
-            </div>
-        </div>
-    </div>
+                </div>
 
-    <script>
-        document.getElementById('loan_option_id').addEventListener('change', function() {
-            var loanOptionId = this.value;  // Get the selected loan option ID
-            // Implement logic to automatically update other fields if needed based on the selected loan option
-        });
-    </script>
+
+                <!--Loan Modal -->
+                <div id="loanModal" class="modal fixed hidden inset-0 flex items-center justify-center z-50">
+                    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+                    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                        <div class="modal-content py-4 text-left px-6">
+                            <div class="flex justify-between items-center pb-3">
+                                <p class="text-2xl font-bold">Create Loan</p>
+                                <button onclick="toggleModal('loanModal')" class="modal-close">
+                                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                        <path d="M6.293 6.293a1 1 0 011.414 0L9 7.586l1.293-1.293a1 1 0 111.414 1.414L10.414 9l1.293 1.293a1 1 0 11-1.414 1.414L9 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L7.586 9 6.293 7.707a1 1 0 010-1.414z"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Modal body for Loan -->
+                            <form id="loanForm" action="{{ route('salary.createLoan', ['employeeId' => $employee->id]) }}" method="POST">
+                                @csrf
+                                <div class="flex flex-col space-y-2">
+                                    <label for="loan_option_id">Loan Option:</label>
+                                    <select id="loan_option_id" name="loan_option_id" class="border rounded p-2" required>
+                                        <option value="" disabled selected>Select Loan Option</option>
+                                        @foreach($loanOptions as $loanOption)
+                                            <option value="{{ $loanOption->id }}">{{ $loanOption->loan_option }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    <label for="title">Title:</label>
+                                    <input type="text" id="title" name="title" class="border rounded p-2" required>
+
+                                    <label for="type">Type:</label>
+                                    <input type="text" id="type" name="type" class="border rounded p-2" required>
+
+                                    <label for="loan_amount">Loan Amount:</label>
+                                    <input type="number" step="0.01" id="loan_amount" name="loan_amount" class="border rounded p-2" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-4">Create Loan</button>
+                            </form>
+
+                            @if ($errors->any())
+                                <div class="mt-4">
+                                    <div class="text-red-500 text-sm">
+                                        Please correct the following errors:
+                                    </div>
+                                    <ul class="list-disc list-inside">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+        <script>
+            document.getElementById('loan_option_id').addEventListener('change', function() {
+                var loanOptionId = this.value;  // Get the selected loan option ID
+                // Implement logic to automatically update other fields if needed based on the selected loan option
+            });
+        </script>
 
 
 <script>

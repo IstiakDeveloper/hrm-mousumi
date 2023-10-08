@@ -219,7 +219,21 @@ class SalaryController extends Controller
 
     public function createDeduction(Request $request, $employeeId)
     {
-        // Logic for creating a deduction
+        $request->validate([
+            'deduction_option_id' => 'required|exists:deduction_options,id',
+            'title' => 'required',
+            'type' => 'required',
+            'deduction_amount' => 'required|numeric|min:0.01',
+        ]);
+
+        // Create the deduction
+        Deduction::create([
+            'employee_id' => $employeeId,
+            'deduction_option_id' => $request->deduction_option_id,
+            'title' => $request->title,
+            'type' => $request->type,
+            'deduction_amount' => $request->deduction_amount,
+        ]);
 
         return back()->with('success', 'Deduction created successfully.');
     }
@@ -266,5 +280,13 @@ class SalaryController extends Controller
         // Delete the payslip
         $loan->delete();
         return redirect()->back()->with('success', 'Loan deleted successfully.');
+    }
+
+    public function deleteDeduction($id)
+    {
+        $deduction = Deduction::findOrFail($id);
+        // Delete the payslip
+        $deduction->delete();
+        return redirect()->back()->with('success', 'Deduction deleted successfully.');
     }
 }

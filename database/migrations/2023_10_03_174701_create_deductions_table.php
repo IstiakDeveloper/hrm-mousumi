@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('type');
             $table->decimal('deduction_amount', 10, 2);
-            // Add other necessary columns
 
             $table->timestamps();
 

@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/salary/{id}/payslip', [SalaryController::class, 'deletePayslip'])->name('delete_payslip');
     Route::delete('/salary/{id}/allowance', [SalaryController::class, 'deleteAllowance'])->name('delete_allowance');
     Route::delete('/salary/{id}/loan', [SalaryController::class, 'deleteLoan'])->name('delete_loan');
+    Route::delete('/salary/{id}/deduction', [SalaryController::class, 'deleteDeduction'])->name('delete_deduction');
 
     Route::post('/salary/{employeeId}/create-payslip', [SalaryController::class, 'createPayslip'])->name('salary.createPayslip');
     Route::post('/salary/{employeeId}/create-allowance', [SalaryController::class, 'createAllowance'])->name('salary.createAllowance');

@@ -127,5 +127,9 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Loan::class);
     }
+    public function deductions()
+    {
+        return $this->hasMany(Deduction::class);
+    }
 }
 
