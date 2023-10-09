@@ -20,7 +20,7 @@
                 <th class="py-2 px-4 border-b">Overtime Minutes</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-200">
             @foreach ($attendances as $attendance)
             <tr>
                 <td class="py-2 px-4 border-b">{{ $attendance->employee->name }}</td>

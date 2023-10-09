@@ -17,7 +17,7 @@
                 <th class="py-2 px-4 bg-gray-100">Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-200">
             @foreach ($departments as $department)
             <tr>
                 <td class="py-2 px-4 text-center">{{ $department->id }}</td>

@@ -17,7 +17,7 @@
                 <th class="py-2 px-4 border-b">Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-200">
             @foreach ($branches as $branch)
             <tr>
                 <td class="py-2 px-4 text-center border-b">{{ $branch->id }}</td>

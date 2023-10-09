@@ -30,96 +30,38 @@ class SalaryController extends Controller
         $loanOptions = LoanOption::all();
         $payslipTypes = PayslipType::all();
         $totalSalary = Payslip::where('employee_id', $employeeId)->sum('basic_salary');
-
-        return view('admin.payroll.salary.set', compact('employee', 'allowanceOptions', 'deductionOptions', 'loanOptions', 'payslipTypes', 'totalSalary'));
+        $salary = Salary::where('employee_id', $employeeId)->first();
+        return view('admin.payroll.salary.set', compact('employee', 'allowanceOptions', 'deductionOptions', 'salary', 'loanOptions', 'payslipTypes', 'totalSalary'));
     }
 
     public function setSalary(Request $request, $employeeId)
     {
-        $request->validate([
-            'payslip_type' => 'required',
-            'salary' => 'required',
-            'allowance_option_id' => 'nullable|exists:allowance_options,id',
-            'deduction_id' => 'nullable|exists:deduction_options,id',
-            'loan_id' => 'nullable|exists:loan_options,id',
-            'payslip_type_id' => 'nullable|exists:payslip_types,id',
-            'title' => 'required_if:allowance_option_id,!=,null',
-            'type' => 'required_if:allowance_option_id,!=,null',
-            'amount' => 'required_if:allowance_option_id,!=,null|numeric|min:0.01',
-        ]);
+        // Get the employee
+        $employee = Employee::findOrFail($employeeId);
 
-        // Calculate the total salary based on existing payslips and the provided salary
-        $existingPayslips = Payslip::where('employee_id', $employeeId)->get();
-        $totalSalary = $request->salary;
+        // Calculate total salary from payslips
+        $totalSalary = $employee->payslips()->sum('basic_salary');
 
-        foreach ($existingPayslips as $payslip) {
-            $totalSalary += $payslip->basic_salary;
-        }
+        // Calculate total allowances
+        $totalAllowances = $employee->allowances()->sum('amount');
 
-        // Calculate the net salary based on the provided salary and adjustments
-        $netSalary = $request->salary;
-        foreach ($existingPayslips as $payslip) {
-            $netSalary += $payslip->basic_salary;
-        }
+        // Calculate total loans
+        $totalLoans = $employee->loans()->sum('loan_amount');
 
-        if ($request->allowance_option_id) {
-            // Create or update allowance record
-            Allowance::updateOrCreate(
-                ['employee_id' => $employeeId],
-                [
-                    'allowance_option_id' => $request->allowance_option_id,
-                    'title' => $request->title,
-                    'type' => $request->type,
-                    'amount' => $request->amount,
-                ]
-            );
+        // Calculate total deductions
+        $totalDeductions = $employee->deductions()->sum('deduction_amount');
 
-            // Add allowance amount to net salary
-            $netSalary += $request->amount;
-        }
+        // Calculate net salary
+        $netSalary = $totalSalary + $totalAllowances - $totalLoans - $totalDeductions;
 
-        if ($request->deduction_id) {
-            // Create deduction record
-            Deduction::create([
-                'employee_id' => $employeeId,
-                'deduction_option_id' => $request->deduction_id,
-            ]);
+        // Check if a salary record exists for the employee, if not create a new one
+        $salary = Salary::updateOrCreate(
+            ['employee_id' => $employeeId],
+            ['salary' => $totalSalary, 'net_salary' => $netSalary]
+        );
 
-            // Subtract deduction amount from net salary
-            $deductionAmount = DeductionOption::findOrFail($request->deduction_id)->amount;
-            $netSalary -= $deductionAmount;
-        }
-
-        if ($request->loan_id) {
-            // Create loan record
-            Loan::create([
-                'employee_id' => $employeeId,
-                'loan_option_id' => $request->loan_id,
-            ]);
-
-            // Subtract loan amount from net salary
-            $loanAmount = LoanOption::findOrFail($request->loan_id)->amount;
-            $netSalary -= $loanAmount;
-        }
-
-        // Calculate the total payslip amount based on the net salary and adjustments
-        $totalPayslipAmount = $netSalary;
-
-        // Create or update the salary record
-        $this->updateOrCreateSalary($employeeId, $request->payslip_type, $request->salary, $netSalary, $request->payslip_type_id, $request->allowance_option_id, $request->deduction_id, $request->loan_id);
-
-        // Create the payslip only when payslip_type is set and allowance_option_id is null
-        if ($request->payslip_type && !$request->allowance_option_id) {
-            $payslip = Payslip::create([
-                'employee_id' => $employeeId,
-                'payslip_type_id' => $request->payslip_type_id,
-                'basic_salary' => $request->salary,
-                'total_amount' => $totalPayslipAmount,
-            ]);
-        }
-
-        // Return the appropriate response
-        return back()->with('success', 'Salary set successfully.');
+        // Redirect back or do something based on your application's flow
+        return redirect()->back()->with('success', 'Salary and net salary updated successfully.');
     }
 
     public function createPayslip(Request $request, $employeeId)

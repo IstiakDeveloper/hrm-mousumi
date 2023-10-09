@@ -2,23 +2,49 @@
 
 @section('content')
 <style>
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
 
+        .btn-primary {
+            background-color: #3490dc; /* Blue */
+        }
+
+        .btn-secondary {
+            background-color: #38a169; /* Green */
+        }
+
+        .btn-success {
+            background-color: #6b46c1; /* Purple */
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
 </style>
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Set Salary for {{ $employee->name }}</h1>
-
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Set Salary for {{ $employee->name }}</h1>
     <!-- Employee Information -->
     <div class="mb-6">
         <h3 class="text-xl font-bold mb-3">Employee Information</h3>
         <p class="mb-3"><span class="font-semibold">Employee Name:</span> {{ $employee->name }}</p>
-        <!-- Display other employee information as needed -->
-
         <h3 class="text-xl font-bold mb-3">Salary Information</h3>
         @if (isset($salary) && $salary)
-            <p><span class="font-semibold">Payroll Type:</span> {{ $salary->payroll_type }}</p>
+            <p><span class="font-semibold">Payroll Type:</span> {{ $salary->payslip_type }}</p>
             <p><span class="font-semibold">Salary:</span> {{ $salary->salary }}</p>
             <p><span class="font-semibold">Net Salary:</span> {{ $salary->net_salary }}</p>
-            <!-- Display other salary-related information -->
+
+            @if ($salary->payslipType)
+            <p><span class="font-semibold">Payslip Type:</span> {{ $salary->payslipType->payslip_type }}</p>
+            @else
+                <p><span class="font-semibold">Payslip Type:</span> Not defined for this salary.</p>
+            @endif
         @else
             <p>No salary information available for this employee.</p>
         @endif
@@ -28,9 +54,11 @@
         <!-- Payslip Option -->
         <div class="w-full md:w-1/2 px-3 mb-6">
             <h3 class="text-xl font-bold mb-3">Payslips</h3>
-            <button class="btn btn-primary mb-3" onclick="toggleModal('payslipModal')">Create Payslip</button>
+            <button class="btn btn-primary mb-3" onclick="toggleModal('payslipModal')">
+                <i class="fas fa-plus"></i>
+            </button>
 
-            @if ($employee->payslips->count() > 0)
+
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
@@ -40,6 +68,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if ($employee->payslips->count() > 0)
                     @foreach($employee->payslips as $payslip)
                         <tr>
                             <td class="text-center py-2 px-4">{{ $payslip->payslip_type->payslip_type }}</td>
@@ -49,23 +78,28 @@
                                 <form action="{{ route('delete_payslip', ['id' => $payslip->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this payslip?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     @endforeach
+                    @else
+                    <tr>
+                        <td class="text-center py-2 px-4" colspan="5">No Payslips available for this employee.</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
-            @else
-                <p>No payslips available for this employee.</p>
-            @endif
         </div>
-
 
         <!-- Allowance Option -->
         <div class="w-full md:w-1/2 px-3 mb-6">
             <h3 class="text-xl font-bold mb-3">Allowances</h3>
-            <button class="btn btn-primary mb-3" onclick="toggleModal('allowanceModal')">Create Allowance</button>
+            <button class="btn btn-primary mb-3" onclick="toggleModal('allowanceModal')">
+                <i class="fas fa-plus"></i>
+            </button>
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
@@ -86,10 +120,12 @@
                                 <td class="text-center py-2 px-4">{{ $allowance->amount }}</td>
                                 <td class="text-center py-2 px-4">
                                     <!-- Delete button to subtract the amount from the total salary -->
-                                    <form action="{{ route('delete_allowance', ['id' => $allowance->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this payslip?')">
+                                    <form action="{{ route('delete_allowance', ['id' => $allowance->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this allowance?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
@@ -97,7 +133,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td class="text-center py-2 px-4" colspan="2">No allowances available for this employee.</td>
+                            <td class="text-center py-2 px-4" colspan="5">No allowances available for this employee.</td>
                         </tr>
                     @endif
                 </tbody>
@@ -107,11 +143,12 @@
     </div>
 
     <div class="flex flex-wrap mb-6">
-
         <!-- Deduction Option -->
         <div class="w-full md:w-1/2 px-3 mb-6">
             <h3 class="text-xl font-bold mb-3">Deductions</h3>
-            <button class="btn btn-primary mb-3" onclick="toggleModal('deductionModal')">Create Deduction</button>
+            <button class="btn btn-primary mb-3" onclick="toggleModal('deductionModal')">
+                <i class="fas fa-plus"></i>
+            </button>
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
@@ -135,7 +172,9 @@
                                     <form action="{{ route('delete_deduction', ['id' => $deduction->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this deduction?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
@@ -152,7 +191,9 @@
         <!-- Loan Option -->
         <div class="w-full md:w-1/2 px-3 mb-6">
             <h3 class="text-xl font-bold mb-3">Loans</h3>
-            <button class="btn btn-primary mb-3" onclick="toggleModal('loanModal')">Create Loan</button>
+            <button class="btn btn-primary mb-3" onclick="toggleModal('loanModal')">
+                <i class="fas fa-plus"></i>
+            </button>
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
@@ -165,35 +206,35 @@
                 </thead>
                 <tbody>
                     @if ($employee->loans && $employee->loans()->count() > 0)
-                    @foreach($employee->loans as $loan)
-                        <tr>
-                            <td class="text-center py-2 px-4">{{ optional($loan->loanOption)->loan_option }}</td>
-                            <td class="text-center py-2 px-4">{{ $loan->title }}</td>
-                            <td class="text-center py-2 px-4">{{ $loan->type }}</td>
-                            <td class="text-center py-2 px-4">{{ $loan->loan_amount }}</td>
-                            <td class="text-center py-2 px-4">
-                                <!-- Delete button to remove the loan -->
-                                <form action="{{ route('delete_loan', ['id' => $loan->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this loan?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                @endforeach
-                @else
+                        @foreach($employee->loans as $loan)
+                            <tr>
+                                <td class="text-center py-2 px-4">{{ optional($loan->loanOption)->loan_option }}</td>
+                                <td class="text-center py-2 px-4">{{ $loan->title }}</td>
+                                <td class="text-center py-2 px-4">{{ $loan->type }}</td>
+                                <td class="text-center py-2 px-4">{{ $loan->loan_amount }}</td>
+                                <td class="text-center py-2 px-4">
+                                    <form action="{{ route('delete_loan', ['id' => $loan->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this loan?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
                             <td class="text-center py-2 px-4" colspan="5">No loans available for this employee.</td>
                         </tr>
-                @endif
+                    @endif
                 </tbody>
             </table>
         </div>
-
     </div>
 
 
-</div>
+
 
 
     <!-- Modals -->
@@ -442,6 +483,12 @@
                     </div>
                 </div>
 
+                <form action="{{ route('salary.setSalary', ['employeeId' => $employee->id]) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-calculator mr-2"></i>Save Salary
+                    </button>
+                </form>
         <script>
             document.getElementById('loan_option_id').addEventListener('change', function() {
                 var loanOptionId = this.value;  // Get the selected loan option ID
@@ -455,6 +502,8 @@ function toggleModal(modalId) {
         const modal = document.getElementById(modalId);
         modal.classList.toggle('hidden');
     }
+
+
 
     // Add event listener to open the modal when the button is clicked
     const openButtons = document.querySelectorAll('.btn-primary');
@@ -484,6 +533,8 @@ function toggleModal(modalId) {
             toggleModal(modalId);
         });
     });
+
+
 
 
 </script>
