@@ -15,6 +15,7 @@ use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\Payroll\AllowanceOptionController;
 use App\Http\Controllers\Payroll\DeductionOptionController;
 use App\Http\Controllers\Payroll\LoanOptionController;
+use App\Http\Controllers\Payroll\PayslipController;
 use App\Http\Controllers\Payroll\PayslipTypeController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\TimesheetController;
@@ -109,6 +110,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/salary/{employeeId}/create-allowance', [SalaryController::class, 'createAllowance'])->name('salary.createAllowance');
     Route::post('/salary/{employeeId}/create-loan', [SalaryController::class, 'createLoan'])->name('salary.createLoan');
     Route::post('/salary/{employeeId}/create-deduction', [SalaryController::class, 'createDeduction'])->name('salary.createDeduction');
+
+    Route::get('/payslip/generate', [PayslipController::class, 'generatePayslip'])->name('payslip.generate');
+    Route::get('/payslip', [PayslipController::class, 'index'])->name('payslip.index');
+
+    Route::post('/payslip/markPaid/{payslipId}', [PayslipController::class, 'markAsPaid'])->name('payslip.markPaid');
+    Route::get('/payslip/edit/{payslipId}', [PayslipController::class, 'editPayslip'])->name('payslip.edit');
+    Route::delete('/payslip/delete/{payslipId}', [PayslipController::class, 'deletePayslip'])->name('payslip.delete');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

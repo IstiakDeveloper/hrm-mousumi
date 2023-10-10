@@ -103,6 +103,21 @@
                     </ul>
                 </li>
 
+                <!-- Payroll -->
+                <li class="mb-2 relative">
+                    <a href="#" class="nav-menu-item flex items-center hover:bg-gray-800 {{ request()->routeIs('salary.*',) ? 'active-menu' : '' }}" onclick="toggleDropdown('payroll-dropdown')">
+                        <span class="w-6"><i class="fa-solid fa-money-bill"></i></span>
+                        <span class="ml-2">Payroll</span>
+                        <span class="ml-auto">
+                            <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                        </span>
+                    </a>
+                    <!-- Dropdown Items - Payroll -->
+                    <ul id="payroll-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300 dropdown">
+                        <li><a href="{{ route('salary.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('salary.*') ? 'active-menu' : '' }}">Set Salary</a></li>
+                    </ul>
+                </li>
+
                 <!-- Role & Permission -->
                 <li class="mb-2 relative">
                     <a href="#" class="nav-menu-item flex items-center hover:bg-gray-800 {{ request()->routeIs('all.permission', 'role.all', 'roles.permission.all') ? 'active-menu' : '' }}" onclick="toggleDropdown('permission-dropdown')">
