@@ -1,5 +1,3 @@
-<!-- resources/views/salary/index.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')

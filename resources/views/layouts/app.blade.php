@@ -115,6 +115,7 @@
                     <!-- Dropdown Items - Payroll -->
                     <ul id="payroll-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300 dropdown">
                         <li><a href="{{ route('salary.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('salary.*') ? 'active-menu' : '' }}">Set Salary</a></li>
+                        <li><a href="{{ route('payslip.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('payslip.*') ? 'active-menu' : '' }}">Payslip</a></li>
                     </ul>
                 </li>
 
@@ -167,6 +168,9 @@
 
     <!-- Font Awesome CDN (for icons) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
     <script>
         function toggleDropdown(dropdownId) {

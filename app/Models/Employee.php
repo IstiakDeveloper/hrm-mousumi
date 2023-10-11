@@ -131,5 +131,11 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Deduction::class);
     }
+
+    public function payslip()
+    {
+        return $this->hasMany(PayslipGenarate::class);
+    }
+
 }
 

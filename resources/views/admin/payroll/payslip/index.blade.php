@@ -1,90 +1,147 @@
 @extends('layouts.app')
+
 @section('content')
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-4">Payslips</h1>
 
-<div class="max-w-md mx-auto">
-    <h1 class="text-2xl font-bold mb-4">Generate Payslips</h1>
-
-    <form action="{{ route('payslip.generate') }}" method="GET" class="space-y-4">
-        <div class="flex space-x-2">
-            <label for="year" class="flex-1">Select Year:</label>
-            <select name="year" id="year" class="flex-2 border rounded p-2">
-                <option value="" disabled selected>Select Year</option>
-                @foreach ($years as $year)
-                    <option value="{{ $year }}">{{ $year }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="flex space-x-2">
-            <label for="month" class="flex-1">Select Month:</label>
-            <select name="month" id="month" class="flex-2 border rounded p-2">
-                <option value="" disabled selected>Select Month</option>
-                @foreach ($months as $month)
-                    <option value="{{ $month }}">{{ date('F', mktime(0, 0, 0, $month, 10)) }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Generate Payslips</button>
-    </form>
-
-    <h1 class="text-2xl font-bold mb-4">Payslips for {{ date('F', mktime(0, 0, 0, $month, 10)) }} {{ $year }}</h1>
-
-    <table class="min-w-full">
-        <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Payroll Type</th>
-                <th>Salary</th>
-                <th>Net Salary</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($payslips as $payslip)
+        <button type="button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mb-6" id="pay-selected-button" style="display: none;" onclick="paySelected()">
+            Pay Selected
+        </button>
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <td>{{ $payslip->employee_id }}</td>
-                    <td>{{ $payslip->employee->name }}</td>
-                    <td>{{ $payslip->payroll_type }}</td>
-                    <td>{{ $payslip->basic_salary }}</td>
-                    <td>{{ $payslip->net_salary }}</td>
-                    <td>{{ $payslip->status }}</td>
-                    <td>
-                        @if ($payslip->status == 'unpaid')
-                            <button class="btn btn-primary">Generate Payslip</button>
-                        @else
-                            <button class="btn btn-success">Paid</button>
-                            <button class="btn btn-info">Edit</button>
-                        @endif
-                        <button class="btn btn-danger">Delete</button>
-                    </td>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <input type="checkbox" id="checkAll" onchange="toggleAllCheckboxes()">
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Employee Name
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Salary
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Net Salary
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Month
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Amount Paid
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                    </th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($employees as $employee)
+                    @php
+                        // Retrieve the employee's salary and payslip for the current month
+                        $salary = App\Models\Salary::where('employee_id', $employee->id)->first();
+                        $payslip = App\Models\PayslipGenarate::where('employee_id', $employee->id)
+                                    ->whereMonth('month', now()->month)
+                                    ->whereYear('month', now()->year)
+                                    ->first();
+                    @endphp
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox" class="pay-checkbox" id="pay-checkbox-{{ $employee->id }}" />
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $employee->id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $employee->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $salary->salary ?? 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $salary->net_salary ?? 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $payslip ? date('F Y', strtotime($payslip->month)) : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $payslip ? $payslip->amount_paid : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $payslip && $payslip->paid ? 'Paid' : 'Unpaid' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <form class="pay-form" action="{{ route('pay', ['employeeId' => $employee->id]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="payment_month" value="{{ now()->format('Y-m-d') }}">
+                                <button type="submit" class="text-indigo-600 hover:text-indigo-900 pay-button" id="pay-button-{{ $employee->id }}" {{ $payslip && $payslip->paid ? 'disabled' : '' }}>
+                                    Pay
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function toggleAllCheckboxes() {
+            const checkAllCheckbox = document.getElementById('checkAll');
+            const payCheckboxes = document.querySelectorAll('.pay-checkbox');
 
-<script>
-    function updateMonths() {
-        const selectedYear = document.getElementById('year').value;
-        const monthSelect = document.getElementById('month');
+            payCheckboxes.forEach(checkbox => {
+                checkbox.checked = checkAllCheckbox.checked;
+            });
 
-        // Clear existing options
-        monthSelect.innerHTML = '';
+            togglePayButton();
+        }
 
-        if (selectedYear) {
-            // Populate months based on the selected year
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        function togglePayButton() {
+            const payCheckboxes = document.querySelectorAll('.pay-checkbox');
+            const paySelectedButton = document.getElementById('pay-selected-button');
+            let atLeastOneChecked = false;
 
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;  // Month numbers are 1-based
-                option.textContent = month;
-                monthSelect.appendChild(option);
+            payCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    atLeastOneChecked = true;
+                }
+            });
+
+            if (atLeastOneChecked) {
+                paySelectedButton.style.display = 'block';
+            } else {
+                paySelectedButton.style.display = 'none';
+            }
+        }
+
+        function paySelected() {
+            const payCheckboxes = document.querySelectorAll('.pay-checkbox:checked');
+
+            if (payCheckboxes.length === 0) {
+                alert('No items selected for payment.');
+                return;
+            }
+
+            const payButtons = [];
+
+            payCheckboxes.forEach(checkbox => {
+                const employeeId = checkbox.id.replace('pay-checkbox-', '');
+                const payButton = document.getElementById('pay-button-' + employeeId);
+
+                if (payButton) {
+                    payButtons.push(payButton);
+                }
+            });
+
+            payButtons.forEach(button => {
+                button.click();
             });
         }
-    }
+
+
+
+
+
+
     </script>
 @endsection

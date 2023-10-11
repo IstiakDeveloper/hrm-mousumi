@@ -9,27 +9,18 @@ use Illuminate\Http\Request;
 
 class PayslipController extends Controller
 {
-    public function generatePayslip($employeeId)
+    public function index(Request $request)
     {
-        // Fetch employee details and payslip info
-        $employee = Employee::findOrFail($employeeId);
-        $payslip = Payslip::where('employee_id', $employeeId)->orderBy('created_at', 'desc')->first();
+        $currentYear = date('Y');
+        $currentMonth = date('m');
 
-        // Determine payslip status
-        $isPaid = $payslip && $payslip->status === 'paid';
+        $selectedYear = $request->input('year', $currentYear);
+        $selectedMonth = $request->input('month', $currentMonth);
 
-        return view('admin.payslip.generate', compact('employee', 'payslip', 'isPaid'));
-    }
+        // Fetch employees with default status as not paid
+        $employees = Employee::all();
 
-    public function index()
-    {
-        $years = Payslip::selectRaw('YEAR(created_at) as year')->distinct()->pluck('year');
-        $months = Payslip::selectRaw('MONTH(created_at) as month')->distinct()->pluck('month');
-        $payslips = Payslip::all();
-
-        return view('admin.payroll.payslip.index', compact('years', 'months', 'payslips'));
-
-
+        return view('admin.payroll.payslip.index', compact('employees', 'selectedYear', 'selectedMonth'));
     }
 
 

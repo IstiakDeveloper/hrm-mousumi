@@ -17,6 +17,7 @@ use App\Http\Controllers\Payroll\DeductionOptionController;
 use App\Http\Controllers\Payroll\LoanOptionController;
 use App\Http\Controllers\Payroll\PayslipController;
 use App\Http\Controllers\Payroll\PayslipTypeController;
+use App\Http\Controllers\PayslipGenerationController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\TimesheetController;
 
@@ -111,12 +112,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/salary/{employeeId}/create-loan', [SalaryController::class, 'createLoan'])->name('salary.createLoan');
     Route::post('/salary/{employeeId}/create-deduction', [SalaryController::class, 'createDeduction'])->name('salary.createDeduction');
 
-    Route::get('/payslip/generate', [PayslipController::class, 'generatePayslip'])->name('payslip.generate');
-    Route::get('/payslip', [PayslipController::class, 'index'])->name('payslip.index');
+    // Route::get('/payslip', [PayslipController::class, 'index'])->name('payslip.index');
+    // Route::get('/pay/{employee_id}/{month}', [PayController::class, 'create'])->name('pay.create');
+    // Route::post('/pay', [PayController::class, 'store'])->name('pay.store');
 
-    Route::post('/payslip/markPaid/{payslipId}', [PayslipController::class, 'markAsPaid'])->name('payslip.markPaid');
-    Route::get('/payslip/edit/{payslipId}', [PayslipController::class, 'editPayslip'])->name('payslip.edit');
-    Route::delete('/payslip/delete/{payslipId}', [PayslipController::class, 'deletePayslip'])->name('payslip.delete');
+
+    Route::get('payslips', [PayslipGenerationController::class, 'index'])->name('payslip.index');
+    Route::post('payslips/generate', [PayslipGenerationController::class, 'generatePayslips'])->name('payslip.generate');
+    Route::post('payslips/{id}/markPaid', [PayslipGenerationController::class, 'markAsPaid'])->name('payslip.markPaid');
+    Route::post('/payslip/pay/{employeeId}', [PayslipGenerationController::class, 'pay'])->name('pay');
+
+    Route::post('/bulk-pay', [PayslipGenerationController::class, 'bulkPay'])->name('bulkPay');
+
+
+
+
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
