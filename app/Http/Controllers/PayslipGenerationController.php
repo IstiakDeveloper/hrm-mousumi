@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allowance;
+use App\Models\Deduction;
 use App\Models\PayslipGenarate;
 use App\Models\Employee;
+use App\Models\Loan;
 use App\Models\Payslip;
 use App\Models\Salary;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PDF;
+
 
 class PayslipGenerationController extends Controller
 {
@@ -124,6 +131,40 @@ class PayslipGenerationController extends Controller
                 ->get();
 
             return $payslipData;
+        }
+        public function generatePayslipPdf($employeeId, $month, $year)
+        {
+            // Fetch the employee
+            $employee = Employee::find($employeeId);
+
+            // Fetch the salary, if exists
+            $salary = Salary::where('employee_id', $employeeId)->first();
+
+            // Fetch the payslip, if exists
+            $payslipAnother = PayslipGenarate::where('employee_id', $employeeId)->first();
+            $payslip = Payslip::where('employee_id', $employeeId)->first();
+
+            // Fetch the allowance, if exists
+            $allowance = Allowance::where('employee_id', $employeeId)->first();
+
+            // Fetch the loan, if exists
+            $loan = Loan::where('employee_id', $employeeId)->first();
+
+            // Fetch the deduction, if exists
+            $deduction = Deduction::where('employee_id', $employeeId)->first();
+
+            $allowanceTotal = Allowance::where('employee_id', $employeeId)->sum('amount');
+            $loanTotal = Loan::where('employee_id', $employeeId)->sum('loan_amount');
+            $deductionTotal = Deduction::where('employee_id', $employeeId)->sum('deduction_amount');
+
+            // Load the PDF view and pass the data
+            $pdf = PDF::loadView('admin.payroll.payslip.pdf', compact('employee', 'salary', 'allowance', 'deduction', 'payslipAnother', 'payslip', 'loan', 'allowanceTotal', 'loanTotal', 'deductionTotal'  ));
+
+            // Generate a unique PDF name
+            $pdfName = 'payslip_' . ($employee ? $employee->name : 'unknown') . '_' . $year . '_' . $month . '.pdf';
+
+            // Return the PDF inline in the browser
+            return $pdf->stream($pdfName);
         }
 
 

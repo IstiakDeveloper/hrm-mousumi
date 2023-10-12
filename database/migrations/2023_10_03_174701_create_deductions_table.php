@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('type');
             $table->decimal('deduction_amount', 10, 2);
-
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

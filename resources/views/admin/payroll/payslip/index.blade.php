@@ -120,7 +120,7 @@
                                         </button>
                                     </form>
                                     @if ($status == 'Paid')
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900 px-4 py-2 border border-indigo-600 rounded">
+                                    <a href="{{ route('generate.payslip.pdf', ['employeeId' => $employee->id, 'month' => $selectedMonth, 'year' => $selectedYear]) }}" class="text-indigo-600 hover:text-indigo-900 px-4 py-2 border border-indigo-600 rounded">
                                         <i class="fas fa-file-pdf text-lg"></i>
                                     </a>
                                     @endif

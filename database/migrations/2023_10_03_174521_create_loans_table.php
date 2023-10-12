@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('type');
             $table->decimal('loan_amount', 10, 2);
-            // Add other necessary columns
-
             $table->timestamps();
-
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('loan_option_id')->references('id')->on('loan_options');
         });
