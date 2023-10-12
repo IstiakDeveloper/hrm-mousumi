@@ -124,6 +124,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/bulk-pay', [PayslipGenerationController::class, 'bulkPay'])->name('bulkPay');
 
+    Route::get('/filter-payslip',  [PayslipGenerationController::class, 'filterPayslip'])->name('filter.payslip');
+
+
+
 
 
 

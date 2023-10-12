@@ -11,18 +11,26 @@ use Illuminate\Http\Request;
 
 class PayslipGenerationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all employees
-        $employees = Employee::all();
+        $selectedMonth = $request->input('month', date('m'));
+        $selectedYear = $request->input('year', date('Y'));
 
-        // Fetch payslip data for each employee
-        foreach ($employees as $employee) {
-            $employee->payslips = PayslipGenarate::where('employee_id', $employee->id)->get();
-        }
 
-        return view('admin.payroll.payslip.index', compact('employees'));
+
+        // Fetch payslip data for the selected month and year
+        $payslipData = $this->fetchPayslipDataForMonthAndYear($selectedMonth, $selectedYear);
+        $employees  = Employee::all();
+
+
+        return view('admin.payroll.payslip.index', [
+            'payslipData' => $payslipData,
+            'selectedMonth' => $selectedMonth,
+            'selectedYear' => $selectedYear,
+            'employees' => $employees
+        ]);
     }
+
 
     public function generatePayslips(Request $request)
     {
@@ -92,9 +100,31 @@ class PayslipGenerationController extends Controller
     }
 
 
+    public function filterPayslip(Request $request)
+{
+    $selectedMonth = $request->input('month');
+    $selectedYear = $request->input('year');
 
+    // Fetch payslip data for the selected month and year
+    $payslipData = $this->fetchPayslipDataForMonthAndYear($selectedMonth, $selectedYear);
+    $employees = Employee::all();
 
+    return view('admin.payroll.payslip.index', [
+        'payslipData' => $payslipData,
+        'selectedMonth' => $selectedMonth,
+        'selectedYear' => $selectedYear,
+        'employees' => $employees
+    ]);
+}
+    private function fetchPayslipDataForMonthAndYear($month, $year)
+        {
+            // Fetch payslip data for the selected month and year
+            $payslipData = PayslipGenarate::whereYear('month', $year)
+                ->whereMonth('month', $month)
+                ->get();
 
+            return $payslipData;
+        }
 
 
 
