@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Job\JobCategoryController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\Payroll\AllowanceOptionController;
@@ -127,7 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/filter-payslip',  [PayslipGenerationController::class, 'filterPayslip'])->name('filter.payslip');
     Route::get('/payslip/{employeeId}/pdf/{month}/{year}', [PayslipGenerationController::class, 'generatePayslipPdf'])->name('generate.payslip.pdf');
 
-
+    Route::resource('job_categories', JobCategoryController::class);
 
 
 

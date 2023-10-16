@@ -75,6 +75,7 @@
                         <li><a href="{{ route('allowance_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('allowance_options.*') ? 'active-menu' : '' }}">Allowance Option</a></li>
                         <li><a href="{{ route('deduction_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('deduction_options.*') ? 'active-menu' : '' }}">Deduction Option</a></li>
                         <li><a href="{{ route('loan_options.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('loan_options.*') ? 'active-menu' : '' }}">Loan Option</a></li>
+                        <li><a href="{{ route('job_categories.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('job_categories.*') ? 'active-menu' : '' }}">Job Category</a></li>
                     </ul>
                 </li>
 
