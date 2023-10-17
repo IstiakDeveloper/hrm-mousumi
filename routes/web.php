@@ -10,7 +10,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Job\JobApplicationController;
 use App\Http\Controllers\Job\JobCategoryController;
+use App\Http\Controllers\Job\JobController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\Payroll\AllowanceOptionController;
@@ -129,11 +131,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/payslip/{employeeId}/pdf/{month}/{year}', [PayslipGenerationController::class, 'generatePayslipPdf'])->name('generate.payslip.pdf');
 
     Route::resource('job_categories', JobCategoryController::class);
-
-
-
-
-
+    Route::resource('jobs', JobController::class);
+    Route::get('job-applications', [JobApplicationController::class, 'viewJobApplications'])->name('admin.jobApplications');
+    Route::get('job_applications/{id}', [JobApplicationController::class, 'showJobApplication'])->name('admin.jobApplications.show');
+    Route::get('jobApplications/{id}/downloadPDF', [JobApplicationController::class, 'downloadPdf'])->name('admin.jobApplications.downloadPDF');
 
 
 
@@ -141,8 +142,14 @@ Route::middleware('auth')->group(function () {
 
 
 
-
 });
+
+Route::get('/career', [JobController::class, 'showAllJobs'])->name('career.index');
+Route::get('/career/{id}', [JobController::class,'jobShow'])->name('jobs.show');
+
+Route::get('jobs/{jobId}/apply', [JobApplicationController::class, 'applyForm'])->name('jobs.applyForm');
+Route::post('jobs/{jobId}/apply', [JobApplicationController::class, 'apply'])->name('jobs.apply');
+
 
 require __DIR__.'/auth.php';
 

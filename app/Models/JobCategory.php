@@ -16,4 +16,5 @@ class JobCategory extends Model
     {
         return $this->hasMany(Job::class);
     }
+    
 }

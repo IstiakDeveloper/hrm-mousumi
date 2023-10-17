@@ -31,4 +31,9 @@ class Job extends Model
     {
         return $this->belongsTo(JobCategory::class);
     }
+
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

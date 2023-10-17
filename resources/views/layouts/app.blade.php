@@ -120,6 +120,22 @@
                     </ul>
                 </li>
 
+                  <!-- Recruitment -->
+                  <li class="mb-2 relative">
+                    <a href="#" class="nav-menu-item flex items-center hover:bg-gray-800 {{ request()->routeIs('jobs.*',) ? 'active-menu' : '' }}" onclick="toggleDropdown('job-dropdown')">
+                        <span class="w-6"><i class="fa-solid fa-book"></i></span>
+                        <span class="ml-2">Recruitment</span>
+                        <span class="ml-auto">
+                            <i id="settings-icon" class="fas fa-chevron-right transform transition-transform duration-200"></i>
+                        </span>
+                    </a>
+                    <!-- Dropdown Items - Recruitment -->
+                    <ul id="job-dropdown" class="hidden mt-2 space-y-2 bg-gray-800 text-gray-300 dropdown">
+                        <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('jobs.*') ? 'active-menu' : '' }}">Jobs</a></li>
+                        <li><a href="{{ route('admin.jobApplications') }}" class="block px-4 py-2 hover:bg-gray-700 {{ request()->routeIs('jobs.*') ? 'active-menu' : '' }}">Applications</a></li>
+                    </ul>
+                </li>
+
                 <!-- Role & Permission -->
                 <li class="mb-2 relative">
                     <a href="#" class="nav-menu-item flex items-center hover:bg-gray-800 {{ request()->routeIs('all.permission', 'role.all', 'roles.permission.all') ? 'active-menu' : '' }}" onclick="toggleDropdown('permission-dropdown')">
