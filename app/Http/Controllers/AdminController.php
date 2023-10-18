@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -100,5 +101,17 @@ class AdminController extends Controller
     }
 
 
+    public function deleteUser($id)
+    {
+
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Delete related employees based on user's email
+        Employee::where('email', $user->email)->delete();
+
+
+        return redirect()->route('all.users')->with('success', 'User and associated records deleted successfully.');
+    }
 
 }

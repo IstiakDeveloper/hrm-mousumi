@@ -9,18 +9,18 @@
         </div>
     </div>
     @if (count($payslipTypes) > 0)
-    <table class="min-w-full">
+    <table class="min-w-full bg-white border border-gray-300">
         <thead>
             <tr>
-                <th class="py-2 px-4 bg-gray-100">ID</th>
+                <th class="py-2 px-4 bg-gray-100">SL</th>
                 <th class="py-2 px-4 bg-gray-100">Payslip Type</th>
                 <th class="py-2 px-4 bg-gray-100">Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach ($payslipTypes as $payslip)
+        <tbody  class="divide-y divide-gray-200">
+            @foreach ($payslipTypes as $key => $payslip)
             <tr>
-                <td class="py-2 px-4 text-center">{{ $payslip->id }}</td>
+                <td class="py-2 px-4 text-center">{{ $key+1}}</td>
                 <td class="py-2 px-4 text-center">{{ $payslip->payslip_type }}</td>
                 <td class="py-2 px-4 text-center">
                     <form class="inline-block" action="{{ route('payslip_types.destroy', $payslip) }}" method="POST">

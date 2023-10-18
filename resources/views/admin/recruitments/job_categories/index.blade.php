@@ -30,14 +30,12 @@
                         <td class="py-2 px-4 text-center border-b">{{ $key+1 }}</td>
                         <td class="py-2 px-4 text-center border-b">{{ $jobCategory->name }}</td>
                         <td class="py-2 px-4 text-center border-b">
-                            <a href="{{ route('job_categories.edit', $jobCategory->id) }}" class="text-blue-600 hover:underline mr-2">
-                                Edit
-                            </a>
+                            <a href="{{ route('job_categories.edit', $jobCategory->id) }}" class="text-yellow-500 mr-2 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
                             <form action="{{ route('job_categories.destroy', $jobCategory->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this job category?')">
-                                    Delete
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
                         </td>

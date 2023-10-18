@@ -92,6 +92,8 @@ Route::middleware('auth')->group(function () {
         Route::get('all/users', 'AllUsers')->name('all.users');
         Route::get('add/user/create', 'CreateUser')->name('user.create');
         Route::post('admin/users',  'store')->name('admin.users.store');
+        Route::delete('admin/{id}/users',  'deleteUser')->name('delete.user');
+
     });
     Route::resource('timesheets', TimesheetController::class);
     Route::resource('leave_types', LeaveTypeController::class);

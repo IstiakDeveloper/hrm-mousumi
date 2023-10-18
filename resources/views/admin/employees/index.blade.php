@@ -9,50 +9,52 @@
         </div>
     </div>
     @if (count($employees) > 0)
-    <table class="min-w-full">
-        <thead>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+          <thead>
             <tr>
-                <th class="py-2 px-4 bg-gray-100">Employee ID</th>
-                <th class="py-2 px-4 bg-gray-100">Name</th>
-                <th class="py-2 px-4 bg-gray-100">Email</th>
-                <th class="py-2 px-4 bg-gray-100">Branch</th>
-                <th class="py-2 px-4 bg-gray-100">Department</th>
-                <th class="py-2 px-4 bg-gray-100">Designation</th>
-                <th class="py-2 px-4 bg-gray-100">Date of Joining</th>
-                <th class="py-2 px-4 bg-gray-100">Avaiable Leave</th>
-                <th class="py-2 px-4 bg-gray-100">Actions</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Employee ID</th>
+              <th class="py-2 px-4 bg-gray-100">Name</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Email</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Branch</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Department</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Designation</th>
+              <th class="py-2 px-4 bg-gray-100 hidden md:table-cell">Date of Joining</th>
+              <th class="py-2 px-4 bg-gray-100">Available Leave</th>
+              <th class="py-2 px-4 bg-gray-100">Actions</th>
             </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
+          </thead>
+          <tbody class="divide-y divide-gray-200">
             @foreach ($employees as $employee)
             <tr>
-                <td class="py-2 px-4 text-center">{{ $employee->employee_id }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->email }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->branch->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->department->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->designation->name }}</td>
-                <td class="py-2 px-4 text-center">{{ $employee->date_of_joining}}</td>
-                <td class="py-2 px-4 text-center">
-                    <ul>
-                        @foreach ($employee->getAvailableLeaveDays() as $leaveTypeId => $availableDays)
-                            <li>{{ $leaveTypeId }}: {{ $availableDays }} days</li>
-                        @endforeach
-                    </ul>
-                </td>
-                <td class="py-2 px-4 text-center">
-                    <a href="{{ route('employees.show', $employee) }}" class="text-blue-500 hover:underline">View</a>
-                    <a href="{{ route('employees.edit', $employee) }}" class="text-yellow-500 hover:underline">Edit</a>
-                    <form class="inline-block" action="{{ route('employees.destroy', $employee) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500 hover:underline" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
-                </td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->employee_id }}</td>
+              <td class="py-2 px-4 text-center">{{ $employee->name }}</td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->email }}</td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->branch->name }}</td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->department->name }}</td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->designation->name }}</td>
+              <td class="py-2 px-4 text-center hidden md:table-cell">{{ $employee->date_of_joining}}</td>
+              <td class="py-2 px-4 text-center">
+                <ul>
+                  @foreach ($employee->getAvailableLeaveDays() as $leaveTypeId => $availableDays)
+                  <li>{{ $leaveTypeId }}: {{ $availableDays }} days</li>
+                  @endforeach
+                </ul>
+              </td>
+              <td class="py-2 px-4 text-center">
+                <a href="{{ route('employees.show', $employee) }}" class="text-blue-500 hover:underline mr-2"><i class="fa-solid fa-eye"></i></a>
+                <a href="{{ route('employees.edit', $employee) }}" class="text-yellow-500 mr-2 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
+                <form class="inline-block" action="{{ route('employees.destroy', $employee) }}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="ml-2 text-red-500 hover:underline" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </td>
             </tr>
             @endforeach
-        </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
     @else
     <p class="mt-4">No employees found.</p>
     @endif

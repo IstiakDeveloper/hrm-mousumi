@@ -43,56 +43,6 @@
             </div>
 
             <nav class="mt-10">
-                {{-- <a class="flex items-center px-6 py-2 mt-4" href="{{route('dashboard')}}" :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('dashboard'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('dashboard') }">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
-                    </svg>
-
-                    <span class="mx-3">Dashboard</span>
-                </a>
-
-                <a class="flex items-center px-6 py-2 mt-4" href="{{route('financial-overview')}}" :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('financial-overview'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('financial-overview') }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
-                      </svg>
-
-
-                    <span class="mx-3">Expencess</span>
-                </a>
-
-                <a class="flex items-center px-6 py-2 mt-4 "
-                    href="{{route('products.index')}}" :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('products'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('products') }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-                    </svg>
-
-
-                    <span class="mx-3">Products</span>
-                </a>
-
-                <a class="flex items-center px-6 py-2 mt-4"
-                    href="{{route('categories.index')}}" :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('categories'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('categories') }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                    </svg>
-
-
-                    <span class="mx-3">Categories</span>
-                </a>
-
-                <a class="flex items-center px-6 py-2 mt-4"
-                    href="{{route('invoices.index')}}" :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('invoices'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('invoices') }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
-                      </svg>
-
-                    <span class="mx-3">Invoices</span>
-                </a> --}}
-
                 <div class="relative group">
                     <a href="{{route('dashboard')}}"
                        class="flex items-center px-6 py-2 mt-4 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer"
@@ -148,7 +98,7 @@
 
                 <div class="relative group">
                     <a
-                       class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('timesheets.*', 'leave.*', 'attendances.*') ? 'active-menu' : '' }}"
+                       class="flex menu-link items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('timesheets.*', 'leave.*', 'attendances.*') ? 'active-menu' : '' }}"
                        @click="toggleDropdown('timesheetDropdown')">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
