@@ -1,0 +1,24 @@
+[33m98c17cc[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m98c17cc[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: commit: design fix for admin tables
+[33maa4fcd9[m HEAD@{2}: pull: Fast-forward
+[33m9033b7c[m HEAD@{3}: commit: complete reqcruitment basic
+[33m51c868c[m HEAD@{4}: commit: Job Category Complete
+[33medefa65[m HEAD@{5}: commit: solve payslip basic
+[33m9c1a3d7[m HEAD@{6}: commit: payslip filter done
+[33m61351ad[m HEAD@{7}: commit: payslip done half not work all paid
+[33m06110bc[m HEAD@{8}: commit: payslip genarate is not done yat
+[33m3a6505f[m HEAD@{9}: commit: done in set salary
+[33mf1a912d[m HEAD@{10}: commit: I have done all the set sallry part now calculate and set done need
+[33mcfeced2[m HEAD@{11}: commit: I complete create a salary under employee without deduction from office need to create deduction then set salary function need to complete
+[33m9fde13f[m HEAD@{12}: pull: Fast-forward
+[33ma8ed592[m HEAD@{13}: commit: payroll all option setup
+[33m2900ffa[m HEAD@{14}: pull: Fast-forward
+[33m4b73736[m HEAD@{15}: commit: office27 Timesheet attendance complete
+[33m933cf3b[m HEAD@{16}: commit: office26-09 error is his format in attendance create
+[33m5102b89[m HEAD@{17}: commit: office25-09 Attedance not complete
+[33mcde305e[m HEAD@{18}: commit: office24
+[33m4b9edda[m HEAD@{19}: commit: fix-all-role-permission-issue
+[33me7dc668[m HEAD@{20}: commit: office09-19
+[33m280e42e[m HEAD@{21}: commit: 17-09-office
+[33m4201df1[m HEAD@{22}: commit: office16
+[33m3dda111[m HEAD@{23}: clone: from https://github.com/IstiakDeveloper/hrm-mousumi.git

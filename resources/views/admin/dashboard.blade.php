@@ -7,22 +7,48 @@
     <!-- Dashboard header -->
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-900">Dashboard</h2>
-        <!-- Add any additional header content here -->
     </div>
 
     <!-- Timesheet data section -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Total Hours Worked -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h3 class="text-xl font-bold mb-2">Total Hours Worked</h3>
-            <p class="text-3xl font-bold text-blue-500">160 hours</p>
+            <h3 class="text-xl font-bold mb-2">Total Staff</h3>
+            <p class="text-3xl font-bold text-blue-500">{{$employeeCount}} Employee</p>
         </div>
 
         <!-- Leave Requests -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h3 class="text-xl font-bold mb-2">Leave Requests</h3>
-            <p class="text-3xl font-bold text-green-500">5 requests</p>
+            <h3 class="text-xl font-bold mb-2">Total Leave Requests</h3>
+            <p class="text-3xl font-bold text-pink-500">{{$leaveCount}} requests</p>
         </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Leave Pending</h3>
+            <p class="text-3xl font-bold text-yellow-500">{{$pendingLeaveCount}} requests</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Leave Approved</h3>
+            <p class="text-3xl font-bold text-green-500">{{$approveLeaveCount}} requests</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Leave Rejected</h3>
+            <p class="text-3xl font-bold text-red-500">{{$rejectLeaveCount}} requests</p>
+        </div>
+
+        <!-- Job -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Total Jobs</h3>
+            <p class="text-3xl font-bold text-pink-500">{{$jobCount}} Jobs</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Open Jobs</h3>
+            <p class="text-3xl font-bold text-yellow-500">{{$openJobCount}} Jobs</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-2">Close Jobs</h3>
+            <p class="text-3xl font-bold text-green-500">{{$closeJobCount}} Jobs</p>
+        </div>
+
 
         <!-- Performance Metrics -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
