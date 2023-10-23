@@ -10,14 +10,34 @@ use Illuminate\Support\Facades\Validator;
 
 class LeaveController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('department.head')->except(['store', 'create']);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $leaves = Leave::all();
+        $user = auth()->user();
+
+        if ($user->isSuperAdmin()) {
+            // Super admin can view all employee leaves
+            $leaves = Leave::all();
+        } elseif ($user->department) {
+            // Regular department head view
+            $departmentEmployees = $user->department->employees;
+            $employeeIds = $departmentEmployees->pluck('id')->toArray();
+            $leaves = Leave::whereIn('employee_id', $employeeIds)->get();
+        } else {
+            flash()->addError('You are not associated with a department');
+            return redirect()->back();
+        }
+
         return view('admin.leave.index', compact('leaves'));
     }
+
 
     /**
      * Show the form for creating a new resource.

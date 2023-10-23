@@ -58,6 +58,7 @@
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('system.menu'))
                     <a
                        class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('branches.*', 'departments.*', 'designations.*', 'leave_types.*', 'payslip_types.*', 'allowance_options.*', 'deduction_options.*', 'loan_options.*', 'job_categories.*') ? 'active-menu' : '' }}"
                        @click="toggleDropdown('hrmDropdown')">
@@ -67,7 +68,7 @@
                       </svg>
                         <span class="mx-3">System Setup</span>
                     </a>
-
+                    @endif
                     <!-- Dropdown content -->
                     <div id="hrmDropdown" class="hidden mt-2 py-2 w-full bg-gray rounded-lg shadow-lg">
                         <a href="{{ route('branches.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('branches.*') ? 'active-menu' : '' }}">Branches</a>
@@ -83,6 +84,7 @@
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('employee.menu'))
                     <a href="{{route('employees.index')}}"
                        class="flex items-center px-6 py-2 mt-4 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer"
                        :class="{ 'text-gray-100 bg-gray-700 bg-opacity-25': isActive('employees'), 'text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100': !isActive('employees') }"
@@ -92,6 +94,7 @@
                       </svg>
                         <span class="mx-3">Employee</span>
                     </a>
+                    @endif
 
                     <!-- Dropdown content -->
                 </div>
@@ -108,13 +111,25 @@
 
                     <!-- Dropdown content -->
                     <div id="timesheetDropdown" class="hidden mt-2 py-2 w-full bg-gray rounded-lg shadow-lg">
-                        <a href="{{ route('timesheets.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('timesheets.*') ? 'active-menu' : '' }}">Timesheets</a>
-                        <a href="{{ route('leave.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('leave.*') ? 'active-menu' : '' }}">Leaves</a>
-                        <a href="{{ route('attendances.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('attendances.*') ? 'active-menu' : '' }}">Attendance</a>
+                        @if (Auth::user()->permissions()->contains('timesheets.menu'))
+                            <a href="{{ route('timesheets.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('timesheets.*') ? 'active-menu' : '' }}">Timesheets</a>
+                        @endif
+                        @if (Auth::user()->isDepartmentHead())
+                            <a href="{{ route('leave.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('leave.*') ? 'active-menu' : '' }}">Leaves</a>
+                        @elseif (Auth::user()->permissions()->contains('leave.menu'))
+                            <a href="{{ route('leave.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('leave.*') ? 'active-menu' : '' }}">Leaves</a>
+                        @endif
+                        @if (Auth::user()->permissions()->contains('apply.leave'))
+                        <a href="{{ route('leave.create') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('leave.*') ? 'active-menu' : '' }}">Apply for Leave</a>
+                        @endif
+                        @if (Auth::user()->permissions()->contains('attendance.menu'))
+                            <a href="{{ route('attendances.index') }}" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('attendances.*') ? 'active-menu' : '' }}">Attendance</a>
+                        @endif
                     </div>
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('payroll.menu'))
                     <a
                        class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('salary.*', 'payslip.*') ? 'active-menu' : '' }}"
                        @click="toggleDropdown('payrollDropdown')">
@@ -123,6 +138,7 @@
                       </svg>
                         <span class="mx-3">Payroll</span>
                     </a>
+                    @endif
 
                     <!-- Dropdown content -->
                     <div id="payrollDropdown" class="hidden mt-2 py-2 w-full bg-gray rounded-lg shadow-lg">
@@ -132,6 +148,7 @@
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('recruitment.menu'))
                     <a
                        class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('jobs.*', 'admin.jobApplications',) ? 'active-menu' : '' }}"
                        @click="toggleDropdown('recruitmentDropdown')">
@@ -140,6 +157,7 @@
                       </svg>
                         <span class="mx-3">Recruitment</span>
                     </a>
+                    @endif
 
                     <!-- Dropdown content -->
                     <div id="recruitmentDropdown" class="hidden mt-2 py-2 w-full bg-gray rounded-lg shadow-lg">
@@ -149,6 +167,7 @@
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('roll_permission.menu'))
                     <a
                        class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer {{ request()->routeIs('all.permission', 'role.all', 'roles.permission.all', 'all.permission') ? 'active-menu' : '' }}"
                        @click="toggleDropdown('rolepermissionDropdown')">
@@ -157,6 +176,7 @@
                       </svg>
                         <span class="mx-3">Role & Permission</span>
                     </a>
+                    @endif
 
                     <!-- Dropdown content -->
                     <div id="rolepermissionDropdown" class="hidden mt-2 py-2 text-gray-100 w-full bg-gray rounded-lg shadow-lg">
@@ -167,6 +187,7 @@
                 </div>
 
                 <div class="relative group">
+                    @if (Auth::user()->permissions()->contains('user.menu'))
                     <a href="{{route('all.users')}}"
                        class="flex items-center px-6 py-2 mt-4 text-gray-500 group-hover:bg-gray-700 group-hover:bg-opacity-25 group-hover:text-gray-100 cursor-pointer  {{ request()->routeIs('all.users', 'user.create') ? 'active-menu' : '' }}"
                        @click="toggleDropdown('userDropdown')">
@@ -175,7 +196,7 @@
                        </svg>
                         <span class="mx-3">User</span>
                     </a>
-
+                    @endif
                     <!-- Dropdown content -->
                 </div>
 

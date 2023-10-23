@@ -17,15 +17,15 @@
             <select name="group_name" id="group_id" class="border border-gray-300 rounded p-2 w-full" required>
                     <option selected="" disabled="">Select Group</option>
                     <option value="dashboard" {{$permission->group_name == 'dashboard' ? 'selected' : ''}}>Dashboard</option>
+                    <option value="hrm_setup" {{$permission->group_name == 'hrm_setup' ? 'selected' : ''}}>HRM Setup</option>
                     <option value="branch" {{$permission->group_name == 'branch' ? 'selected' : ''}}>Branch</option>
                     <option value="department" {{$permission->group_name == 'department' ? 'selected' : ''}}>Department</option>
                     <option value="designation" {{$permission->group_name == 'designation' ? 'selected' : ''}}>Designation</option>
                     <option value="employee" {{$permission->group_name == 'employee' ? 'selected' : ''}}>Employee</option>
-                    <option value="roll_permission" {{$permission->group_name == 'roll_permission' ? 'selected' : ''}}>Roll & Permission</option>
+                    <option value="timesheet" {{$permission->group_name == 'timesheet' ? 'selected' : ''}}>Timesheet</option>
+                    <option value="timesheet" {{$permission->group_name == 'timesheet' ? 'selected' : ''}}>Timesheet</option>
+                    <option value="payroll" {{$permission->group_name == 'payroll' ? 'selected' : ''}}>Roll & Permission</option>
                     <option value="users" {{$permission->group_name == 'users' ? 'selected' : ''}}>Users</option>
-                    <option value="branch" {{$permission->group_name == 'branch' ? 'selected' : ''}}>Branch</option>
-                    <option value="branch" {{$permission->group_name == 'branch' ? 'selected' : ''}}>Branch</option>
-                    <option value="branch" {{$permission->group_name == 'branch' ? 'selected' : ''}}>Branch</option>
             </select>
         </div>
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Update Permission</button>

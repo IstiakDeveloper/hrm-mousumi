@@ -26,9 +26,9 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @foreach ($leaves as $key => $leave)
+                    @foreach ($leaves as $leave)
                         <tr>
-                            <td class="py-2 px-4 text-center">{{ $kay+1}}</td>
+                            <td class="py-2 px-4 text-center">{{$leave->id }}</td>
                             <td class="py-2 px-4 text-center">{{ $leave->employee->name }}</td>
                             <td class="py-2 px-4 text-center">{{ $leave->leaveType->leave_type }}</td>
                             <td class="py-2 px-4 text-center">{{ $leave->applied_on }}</td>

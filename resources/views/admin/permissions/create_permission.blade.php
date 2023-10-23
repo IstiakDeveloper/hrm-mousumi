@@ -14,10 +14,12 @@
             <select name="group_name" id="group_id" class="border border-gray-300 rounded p-2 w-full" required>
                     <option selected="" disabled="">Select Group</option>
                     <option value="dashboard">Dashboard</option>
-                    <option value="branch">HRM Setup</option>
+                    <option value="hrm_setup">HRM Setup</option>
                     <option value="branch">Branch</option>
                     <option value="department">Department</option>
                     <option value="designation">Designation</option>
+                    <option value="timesheet">Timesheet</option>
+                    <option value="payroll">Payroll</option>
                     <option value="employee">Employee</option>
                     <option value="roll_permission">Role & Permission</option>
                     <option value="users">Users</option>

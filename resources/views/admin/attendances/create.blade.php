@@ -102,7 +102,6 @@
         document.getElementById('clock_out_section').style.display = 'block';
         document.getElementById('clockInButton').classList.add('hidden');
         document.getElementById('clock_in').classList.add('hidden');
-
     }
 
     function handleClockOut() {
@@ -183,19 +182,20 @@
         const clockOutSection = document.getElementById('clock_out_section');
 
         if (status === 'Absent') {
-            clockSection.classList.add('hidden');
-            lateEarlyOvertimeSection.classList.add('hidden');
-            clockOutSection.style.display = 'none';
+            clockSection.style.display = 'none';  // Hide clock_section
+            lateEarlyOvertimeSection.style.display = 'none';  // Hide late_early_overtime_section
+            clockOutSection.style.display = 'none';  // Hide clock_out_section
             document.getElementById('stopwatch').classList.add('hidden');
             clearInterval(stopwatchInterval);
             document.getElementById('submitButton').disabled = false;
-            document.getElementById('attendanceForm').submit();
         } else {
-            clockSection.classList.remove('hidden');
-            lateEarlyOvertimeSection.classList.remove('hidden');
+            clockSection.style.display = 'block';  // Show clock_section
+            lateEarlyOvertimeSection.style.display = 'block';  // Show late_early_overtime_section
+            clockOutSection.style.display = 'block';  // Show clock_out_section
             document.getElementById('clockInButton').disabled = false;
         }
     }
 </script>
+
 
 @endsection

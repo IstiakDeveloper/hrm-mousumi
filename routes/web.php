@@ -50,7 +50,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('branches', BranchController::class);
+
     Route::resource('departments', DepartmentController::class);
+
+    Route::get('assign-department-head', [DepartmentController::class,'assignHead'])->name('assign.head');
+    Route::post('assign-department-head', [DepartmentController::class,'storeHead'])->name('store.head');
+
     Route::resource('designations', DesignationController::class);
     Route::resource('employees', EmployeeController::class);
     Route::get('employees/{employee}/print', [EmployeeController::class, 'print'])->name('employees.print');
@@ -145,6 +150,11 @@ Route::middleware('auth')->group(function () {
 
 
 });
+
+Route::middleware(['auth', 'department.head'])->group(function () {
+    Route::resource('leave', LeaveController::class)->except(['create', 'store']);
+});
+
 
 Route::get('/career', [JobController::class, 'showAllJobs'])->name('career.index');
 Route::get('/career/{id}', [JobController::class,'jobShow'])->name('jobs.show');

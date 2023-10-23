@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Department;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
 {
@@ -67,5 +69,30 @@ class DepartmentController extends Controller
 
         return redirect()->route('departments.index')->with('success', 'Department deleted successfully');
     }
+
+
+    public function assignHead()
+    {
+        $departments = Department::all();
+        $users = User::all();
+        return view('admin.departments.assign', compact('departments', 'users'));
+    }
+
+    public function storeHead(Request $request)
+    {
+        $department = Department::find($request->input('department_id'));
+        $user = User::find($request->input('user_id'));
+
+        // Check if the department and user belong to the same branch
+        if ($department->branch_id === $user->branch_id) {
+            $department->update(['department_head_id' => $user->id]);
+            return redirect()->route('departments.index')->with('success', 'Department head assigned successfully');
+        } else {
+            return redirect()->route('assign.head')->with('error', 'Selected department and user are not in the same branch.');
+        }
+    }
+
+
+
 }
 

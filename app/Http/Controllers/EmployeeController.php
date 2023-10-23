@@ -88,16 +88,13 @@ class EmployeeController extends Controller
             'password' => bcrypt($request->password),
             'role_id' => $role->id,
             'employee_id' => $employee->id,
+            'department_id' => $request->department_id,
+            'branch_id' => $request->branch_id,
         ]);
 
         $user->assignRole($role);
 
-
         return redirect()->route('employees.index')->with('success', 'User created successfully.');
-
-
-
-
 
         // Handle file uploads (certificate, resume, photo) if provided
         if ($request->hasFile('certificate')) {

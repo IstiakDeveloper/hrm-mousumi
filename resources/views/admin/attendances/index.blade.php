@@ -4,7 +4,9 @@
 <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl mb-4">Attendance Records</h1>
+        @if (Auth::user()->permissions()->contains('attendance.entry'))
         <a href="{{ route('attendances.create') }}" class="bg-blue-500 text-white py-2 px-4 my-2 rounded hover:bg-blue-600">Create Attendance</a>
+        @endif
     </div>
 
     <div class="overflow-x-auto">

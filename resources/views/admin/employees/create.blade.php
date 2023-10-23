@@ -74,10 +74,11 @@
                     <label for="department_id" class="block font-medium">Department:</label>
                     <select name="department_id" id="department_id" class="border border-gray-300 rounded p-2 w-full" required>
                         @foreach ($departments as $department)
-                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            <option value="{{ $department->id }}">{{ $department->name }} - {{ $department->branch->name }}</option>
                         @endforeach
                     </select>
                 </div>
+
                 <!-- Designation -->
                 <div class="mb-4">
                     <label for="designation_id" class="block font-medium">Designation:</label>

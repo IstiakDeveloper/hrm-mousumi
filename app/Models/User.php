@@ -27,7 +27,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'employee_id'
+        'employee_id',
+        'department_id',
+        'branch_id',
+
     ];
 
     /**
@@ -61,6 +64,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
 
     // public function permissions()
     // {
@@ -98,6 +111,17 @@ class User extends Authenticatable
             return $hasPermission;
         }
     }
+
+    public function isDepartmentHead()
+    {
+        // Check if the user's ID matches the department head ID
+        return $this->id === optional($this->department)->department_head_id;
+    }
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('superadmin');
+    }
+
 
 
 }
