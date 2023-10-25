@@ -7,6 +7,9 @@
             <div class="p-4 flex justify-end">
                 <a href="{{ route('employees.print', ['employee' => $employee->id]) }}" class="bg-blue-500 text-white px-4 py-2 rounded-full mr-2 hover:bg-blue-600">Print</a>
                 <a href="{{ route('employees.download', ['employee' => $employee]) }}" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">Download PDF</a>
+                <a href="{{ route('employees.transfer', $employee) }}" class="bg-red-500 hover:bg-red-700 ml-2 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                    Transfer Employee
+                </a>
             </div>
             <div class="px-6 py-4">
                 <div class="text-center">

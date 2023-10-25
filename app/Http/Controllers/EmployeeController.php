@@ -231,4 +231,29 @@ class EmployeeController extends Controller
 
         return redirect()->route('employees.index')->with('success', 'Employee deleted successfully');
     }
+
+    public function transfer(Employee $employee)
+    {
+        return view('admin.employees.transfer', [
+            'employee' => $employee,
+            'branches' => Branch::all(),
+            'departments' => Department::all(),
+            'designations' => Designation::all(),
+        ]);
+    }
+
+    public function transferUpdate(Request $request, Employee $employee)
+    {
+        $request->validate([
+            'branch_id' => 'required|exists:branches,id',
+            'department_id' => 'required|exists:departments,id',
+            'designation_id' => 'required|exists:designations,id',
+        ]);
+
+        $employee->update($request->all());
+
+        return redirect()->route('employees.index')->with('success', 'Employee transferred successfully.');
+    }
+
+
 }

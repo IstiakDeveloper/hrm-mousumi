@@ -57,9 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::post('assign-department-head', [DepartmentController::class,'storeHead'])->name('store.head');
 
     Route::resource('designations', DesignationController::class);
-    Route::resource('employees', EmployeeController::class);
-    Route::get('employees/{employee}/print', [EmployeeController::class, 'print'])->name('employees.print');
-    Route::get('employees/{employee}/download',  [EmployeeController::class, 'download'])->name('employees.download');
+
+    route::controller(EmployeeController::class)->group(function () {
+        Route::resource('employees', EmployeeController::class);
+        Route::get('employees/{employee}/print', 'print')->name('employees.print');
+        Route::get('employees/{employee}/download',  'download')->name('employees.download');
+        Route::get('/employees/{employee}/transfer', 'transfer')->name('employees.transfer');
+        Route::put('/employees/{employee}/transfer', 'transferUpdate')->name('employees.transfer.update');
+    });
+
 
     Route::controller(RoleController::class)->group(function(){
         Route::get('all/permission', 'AllPermission')->name('all.permission');
@@ -161,6 +167,8 @@ Route::get('/career/{id}', [JobController::class,'jobShow'])->name('jobs.show');
 
 Route::get('jobs/{jobId}/apply', [JobApplicationController::class, 'applyForm'])->name('jobs.applyForm');
 Route::post('jobs/{jobId}/apply', [JobApplicationController::class, 'apply'])->name('jobs.apply');
+
+
 
 
 require __DIR__.'/auth.php';

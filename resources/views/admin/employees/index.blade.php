@@ -44,6 +44,9 @@
               <td class="py-2 px-4 text-center">
                 <a href="{{ route('employees.show', $employee) }}" class="text-blue-500 hover:underline mr-2"><i class="fa-solid fa-eye"></i></a>
                 <a href="{{ route('employees.edit', $employee) }}" class="text-yellow-500 mr-2 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{{ route('employees.transfer', $employee) }}" class="text-red-500 mr-2 hover:underline">
+                    <i class="fa-solid fa-right-left"></i>
+                </a>
                 <form class="inline-block" action="{{ route('employees.destroy', $employee) }}" method="POST">
                   @csrf
                   @method('DELETE')
