@@ -20,7 +20,18 @@
         </div>
         <div class="mb-4">
             <label for="description" class="block font-medium">Description:</label>
-            <textarea name="description" id="description" class="border border-gray-300 rounded p-2 w-full" rows="4">{{ $designation->description }}</textarea>
+            <textarea name="description" id="description" class="border border-gray-300 rounded p-2 w-full" rows="4">{{ $designation->job_description }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="salary_grade_id" class="block font-medium">Salary Grade:</label>
+            <select name="salary_grade_id" id="salary_grade_id" class="border border-gray-300 rounded p-2 w-full">
+                <option value="">Select Salary Grade</option>
+                @foreach ($salaryGrades as $grade)
+                    <option value="{{ $grade->id }}" {{ $designation->salary_grade_id == $grade->id ? 'selected' : '' }}>
+                        {{ $grade->grade_name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Update Designation</button>
     </form>

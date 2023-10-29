@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalaryStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Models\Employee;
@@ -27,14 +28,26 @@ class EmployeeController extends Controller
         // Generate employee ID
         $generatedEmployeeID = $this->generateEmployeeID();
 
-        // Load the create view and pass the required data
+        // Fetch the necessary data
+        $branches = Branch::all();
+        $departments = Department::all();
+        $designations = Designation::with('salaryGrade')->get();
+
+        // Additional data: Get salary steps for each designation
+        $designations->each(function ($designation) {
+            $designation->salarySteps = $designation->salaryGrade->salarySteps;
+        });
+
+        // Return the view with the data
         return view('admin.employees.create', [
             'generatedEmployeeID' => $generatedEmployeeID,
-            'branches' => Branch::all(),
-            'departments' => Department::all(),
-            'designations' => Designation::all(),
-        ]);
+            'branches' => $branches,
+            'departments' => $departments,
+            'designations' => $designations,
+            'salarySteps' => SalaryStep::all(),
+]);
     }
+
 
     public function store(Request $request)
     {

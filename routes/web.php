@@ -15,12 +15,14 @@ use App\Http\Controllers\Job\JobCategoryController;
 use App\Http\Controllers\Job\JobController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\Loan\LoannController;
 use App\Http\Controllers\Payroll\AllowanceOptionController;
 use App\Http\Controllers\Payroll\DeductionOptionController;
 use App\Http\Controllers\Payroll\LoanOptionController;
 use App\Http\Controllers\Payroll\PayslipController;
 use App\Http\Controllers\Payroll\PayslipTypeController;
 use App\Http\Controllers\PayslipGenerationController;
+use App\Http\Controllers\Salary\SalaryController as SalarySalaryController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\TimesheetController;
 
@@ -148,6 +150,23 @@ Route::middleware('auth')->group(function () {
     Route::get('job-applications', [JobApplicationController::class, 'viewJobApplications'])->name('admin.jobApplications');
     Route::get('job_applications/{id}', [JobApplicationController::class, 'showJobApplication'])->name('admin.jobApplications.show');
     Route::get('jobApplications/{id}/downloadPDF', [JobApplicationController::class, 'downloadPdf'])->name('admin.jobApplications.downloadPDF');
+
+
+    Route::controller(SalarySalaryController::class)->group(function(){
+        Route::get('/salary/grade/create', 'createGrade')->name('grade.create');
+        Route::post('/salary/grade/store', 'storeGrade')->name('grade.store');
+        Route::get('/salary', 'index')->name('salary.index');
+        Route::get('/salary/grades/{grade}',  'showGrade')->name('grade.show');
+
+        Route::get('/salary/step/create', 'createStep')->name('step.create');
+        Route::post('/salary/step/store', 'storeStep')->name('step.store');
+
+    });
+    Route::resource('loanns', LoannController::class);
+
+
+
+
 
 
 

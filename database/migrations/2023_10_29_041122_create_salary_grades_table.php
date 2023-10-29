@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('designations', function (Blueprint $table) {
+        Schema::create('salary_grades', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('job_description')->nullable();
-            $table->unsignedBigInteger('department_id');
+            $table->string('grade_name');
             $table->timestamps();
-
-            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('designations');
+        Schema::dropIfExists('salary_grades');
     }
 };

@@ -15,6 +15,7 @@
                     <th class="py-2 px-4 bg-gray-100">Department</th>
                     <th class="py-2 px-4 bg-gray-100">Name</th>
                     <th class="py-2 px-4 bg-gray-100">Description</th>
+                    <th class="py-2 px-4 bg-gray-100">Salary Grade</th> <!-- New column for Salary Grade -->
                     <th class="py-2 px-4 bg-gray-100">Actions</th>
                 </tr>
             </thead>
@@ -25,6 +26,7 @@
                     <td class="py-2 px-4 text-center">{{ $designation->department->name }}</td>
                     <td class="py-2 px-4 text-center">{{ $designation->name }}</td>
                     <td class="py-2 px-4 text-center">{{ $designation->job_description }}</td>
+                    <td class="py-2 px-4 text-center">{{ $designation->salaryGrade->grade_name }}</td> <!-- Display Salary Grade name -->
                     <td class="py-2 px-4 text-center">
                         <a href="{{ route('designations.show', $designation) }}" class="text-blue-500 hover:underline mr-2"><i class="fa-solid fa-eye"></i></a>
                         <a href="{{ route('designations.edit', $designation) }}" class="text-yellow-500 mr-2 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>

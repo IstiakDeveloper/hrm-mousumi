@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\SalaryGrade;
 use Illuminate\Http\Request;
 use App\Models\Designation;
 
@@ -15,29 +16,36 @@ class DesignationController extends Controller
     }
 
     public function create()
-
     {
         $departments = Department::all();
-        return view('admin.designations.create', ['departments' => $departments]);
+        $grades = SalaryGrade::all(); // Fetch available grades
+        return view('admin.designations.create', ['departments' => $departments, 'grades' => $grades]);
     }
 
     public function store(Request $request)
     {
-        // Validate and store designation data
         $data = $request->validate([
             'name' => 'required|string',
             'job_description' => 'nullable|string',
             'department_id' => 'required|integer',
+            'salary_grade_id' => 'required|integer',
         ]);
 
-        $designation = Designation::create($data);
+        $designation = new Designation($data);
+        $designation->save();
+
+        $salaryGrade = SalaryGrade::find($data['salary_grade_id']);
+        $designation->salaryGrade()->associate($salaryGrade);
+        $designation->save();
 
         return redirect()->route('designations.index')->with('success', 'Designation created successfully');
     }
 
     public function edit(Designation $designation)
     {
-        return view('admin.designations.edit', compact('designation'));
+        $departments = Department::all();
+        $salaryGrades = SalaryGrade::all();
+        return view('admin.designations.edit', compact('designation', 'departments', 'salaryGrades'));
     }
 
     public function update(Request $request, Designation $designation)
@@ -46,6 +54,7 @@ class DesignationController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
+            'salary_grade_id' => 'required|integer'
         ]);
 
         $designation->update($data);

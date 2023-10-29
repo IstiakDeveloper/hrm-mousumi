@@ -69,6 +69,7 @@
                         @endforeach
                     </select>
                 </div>
+
                 <!-- Department -->
                 <div class="mb-4">
                     <label for="department_id" class="block font-medium">Department:</label>
@@ -79,15 +80,36 @@
                     </select>
                 </div>
 
-                <!-- Designation -->
-                <div class="mb-4">
-                    <label for="designation_id" class="block font-medium">Designation:</label>
-                    <select name="designation_id" id="designation_id" class="border border-gray-300 rounded p-2 w-full" required>
-                        @foreach ($designations as $designation)
-                            <option value="{{ $designation->id }}">{{ $designation->name }}</option>
+            <!-- Designation -->
+            <div class="mb-4">
+                <label for="designation_id" class="block font-medium">Designation:</label>
+                <select name="designation_id" id="designation_id" class="border border-gray-300 rounded p-2 w-full" required>
+                    <option selected disabled>Select Designation</option>
+                    @foreach ($designations as $designation)
+                        <option value="{{ $designation->id }}" data-salary-grade="{{ $designation->salary_grade_id }}">{{ $designation->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Salary Grade -->
+            <div class="mb-4">
+                <label for="salary_grade_id" class="block font-medium">Salary Grade:</label>
+                <input type="text" name="salary_grade_id" id="salary_grade_id" class="border border-gray-300 rounded p-2 w-full" readonly required>
+            </div>
+
+            <!-- Salary Step -->
+            <div class="mb-4">
+                <label for="salary_step_id" class="block font-medium">Salary Step:</label>
+                <select name="salary_step_id" id="salary_step_id" class="border border-gray-300 rounded p-2 w-full" disabled required>
+                    @if(isset($designation->salarySteps))
+                        @foreach ($designation->salarySteps as $step)
+                            <option value="{{ $step->id }}">{{ $step->step_name }}</option>
                         @endforeach
-                    </select>
-                </div>
+                    @endif
+                </select>
+            </div>
+
+
                 <!-- Date of Joining -->
                 <div class="mb-4">
                     <label for="date_of_joining" class="block font-medium">Date of Joining:</label>
@@ -162,5 +184,36 @@
             </ul>
         </div>
     @endif
+
+
 </div>
+
+
+
+<script>
+    const designationSelect = document.getElementById('designation_id');
+    const salaryGradeInput = document.getElementById('salary_grade_id');
+    const salaryStepSelect = document.getElementById('salary_step_id');
+
+    designationSelect.addEventListener('change', function () {
+        const selectedDesignation = this.options[this.selectedIndex];
+        const salaryGrade = selectedDesignation.getAttribute('data-salary-grade');
+        const salarySteps = @json($salarySteps);
+
+        // Set the salary grade field
+        salaryGradeInput.value = salaryGrade;
+
+        // Enable the salary step select
+        salaryStepSelect.disabled = false;
+
+        // Clear and populate the salary step options
+        salaryStepSelect.innerHTML = '';
+        salarySteps.forEach(step => {
+            const option = document.createElement('option');
+            option.value = step.id;
+            option.textContent = step.step_name;
+            salaryStepSelect.appendChild(option);
+        });
+    });
+</script>
 @endsection
