@@ -20,4 +20,8 @@ class SalaryGrade extends Model
     {
         return $this->hasMany(Designation::class, 'salary_grade_id');
     }
+    public function salarySteps()
+    {
+        return $this->hasMany(SalaryStep::class);
+    }
 }

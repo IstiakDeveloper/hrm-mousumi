@@ -158,6 +158,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/salary', 'index')->name('salary.index');
         Route::get('/salary/grades/{grade}',  'showGrade')->name('grade.show');
 
+        Route::get('salaries', 'setSalaryIndex')->name('set.salary.index');
+        Route::get('employees/{employee}/set-salary', 'setSalaryForm')->name('employee.setSalary');
+        Route::post('employees/{employee}/set-salary', 'setSalary')->name('employee.setSalary');
+        Route::get('/get-steps-by-grade/{grade}', 'getStepsByGrade')->name('getStepsByGrade');
+        Route::get('employee/{employee}/show-salary', 'showSalary')->name('employee.showSalary');
+
+
+
         Route::get('/salary/step/create', 'createStep')->name('step.create');
         Route::post('/salary/step/store', 'storeStep')->name('step.store');
 

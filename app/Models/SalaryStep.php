@@ -34,4 +34,13 @@ class SalaryStep extends Model
     {
         return $this->belongsTo(SalaryGrade::class, 'salary_grade_id');
     }
+    public function salaryGrade()
+    {
+        return $this->belongsTo(SalaryGrade::class);
+    }
+
+    public function employeeSalaries()
+    {
+        return $this->hasMany(EmployeeSalary::class);
+    }
 }

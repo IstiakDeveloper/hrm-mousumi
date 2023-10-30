@@ -24,7 +24,12 @@ class Designation extends Model
     }
     public function salaryGrade()
     {
-        return $this->belongsTo(SalaryGrade::class, 'salary_grade_id');
+        return $this->belongsTo(SalaryGrade::class);
+    }
+
+    public function salarySteps()
+    {
+        return $this->salaryGrade->hasMany(SalaryStep::class);
     }
 
 }

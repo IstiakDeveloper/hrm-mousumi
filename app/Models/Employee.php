@@ -140,6 +140,10 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Loann::class);
     }
+    public function employeeSalary()
+    {
+        return $this->hasOne(EmployeeSalary::class);
+    }
 
 }
 

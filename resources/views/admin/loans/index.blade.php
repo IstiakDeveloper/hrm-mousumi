@@ -2,7 +2,12 @@
 
 @section('content')
     <div class="container mx-auto mt-10">
-        <h2 class="text-2xl font-semibold mb-4">Loan Listing</h2>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold">Loan Listing</h1>
+            <div>
+                <a href="{{ route('loanns.create') }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Create Loans</a>
+            </div>
+        </div>
 
         <table class="min-w-full bg-white shadow-md rounded overflow-hidden">
             <thead class="bg-gray-800 text-white">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Salary;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\EmployeeSalary;
+use App\Models\Loann;
 use App\Models\SalaryGrade;
 use App\Models\SalaryStep;
 use Illuminate\Http\Request;
@@ -79,6 +81,143 @@ class SalaryController extends Controller
 
         return view('admin.salary.show_grade', compact('grade', 'steps'));
     }
+
+    public function setSalaryIndex()
+    {
+        $employees = Employee::all(); // Retrieve all employees
+        $employeeSalaries = EmployeeSalary::with('salaryStep')->get(); // Retrieve all employee salaries with steps
+
+        $salaryData = [];
+
+        foreach ($employees as $employee) {
+            $employeeSalary = $employeeSalaries->where('employee_id', $employee->id)->first();
+
+            if ($employeeSalary) {
+                $salaryStep = $employeeSalary->salaryStep;
+                $pf_loan_total = $salaryStep->pf_loan + $employeeSalary->pf_loan;
+                $laptop_loan_total = $salaryStep->laptop_loan + $employeeSalary->laptop_loan;
+                $motorcycle_loan_total = $salaryStep->motorcycle_loan + $employeeSalary->motorcycle_loan;
+                $deduction_total = $salaryStep->total_deduction + $employeeSalary->pf_loan + $employeeSalary->laptop_loan + $employeeSalary->motorcycle_loan;
+                $salary_total = $salaryStep->total_salary - $deduction_total;
+
+                $salaryData[] = [
+                    'employee' => $employee,
+                    'employeeSalary' => $employeeSalary,
+                    'pf_loan_total' => $pf_loan_total,
+                    'laptop_loan_total' => $laptop_loan_total,
+                    'motorcycle_loan_total' => $motorcycle_loan_total,
+                    'deduction_total' => $deduction_total,
+                    'salary_total' => $salary_total,
+                ];
+            } else {
+                $salaryData[] = [
+                    'employee' => $employee,
+                    'employeeSalary' => null,
+                    'pf_loan_total' => 0,
+                    'laptop_loan_total' => 0,
+                    'motorcycle_loan_total' => 0,
+                    'deduction_total' => 0,
+                    'salary_total' => 0,
+                ];
+            }
+        }
+
+        return view('admin.salary.set_salary_index', [
+            'salaryData' => $salaryData,
+
+        ]);
+    }
+
+
+    public function setSalaryForm(Employee $employee)
+    {
+        $salaryGrades = SalaryGrade::all();
+        $salarySteps = SalaryStep::all();
+        $selectedGrade = null;
+        $loans = Loann::where('employee_id', $employee->id)->get();
+        $loanTypes = ['motorcycle_loan', 'pf_loan', 'laptop_loan'];
+
+        return view('admin.salary.set_salary', [
+            'employee' => $employee,
+            'salaryGrades' => $salaryGrades,
+            'salarySteps' => $salarySteps,
+            'selectedGrade' => $selectedGrade,
+            'loans' => $loans,
+            'loanTypes' => $loanTypes,
+        ]);
+    }
+
+    public function getStepsByGrade(Request $request, $grade)
+    {
+        // Retrieve the selected grade and its associated steps
+        $selectedGrade = SalaryGrade::with('steps')->find($grade);
+
+        // Return the steps associated with the grade as JSON
+        return response()->json(['steps' => $selectedGrade->steps]);
+    }
+
+
+    public function setSalary(Request $request, Employee $employee)
+    {
+        $validatedData = $request->validate([
+            'salary_grade_id' => 'required|exists:salary_grades,id',
+            'salary_step_id' => 'required|exists:salary_steps,id',
+            'motorcycle_loan' => 'nullable|numeric',
+            'pf_loan' => 'nullable|numeric',
+            'laptop_loan' => 'nullable|numeric',
+        ]);
+
+
+        // Create or update the employee's salary record
+        $employeeSalary = EmployeeSalary::updateOrCreate(
+            ['employee_id' => $employee->id], // Ensure 'employee_id' is set
+            [
+                'salary_grade_id' => $validatedData['salary_grade_id'],
+                'salary_step_id' => $validatedData['salary_step_id'],
+                'motorcycle_loan' => $validatedData['motorcycle_loan'] ?? 0,
+                'pf_loan' => $validatedData['pf_loan'] ?? 0,
+                'laptop_loan' => $validatedData['laptop_loan'] ?? 0,
+            ]
+        );
+
+        return redirect()->route('set.salary.index')->with('success', 'Salary set successfully.');
+    }
+
+    public function showSalary(Employee $employee)
+    {
+        // Retrieve the employee's salary information using the EmployeeSalary model
+        $employeeSalary = EmployeeSalary::where('employee_id', $employee->id)->first();
+
+        if ($employeeSalary) {
+            $salaryStep = $employeeSalary->salaryStep;
+
+            // Calculate the total for fields with the same name from both tables
+            $pf_loan_total = $salaryStep->pf_loan + $employeeSalary->pf_loan;
+            $laptop_loan_total = $salaryStep->laptop_loan + $employeeSalary->laptop_loan;
+            $motorcycle_loan_total = $salaryStep->motorcycle_loan + $employeeSalary->motorcycle_loan;
+            $deduction_total = $salaryStep->total_deduction + $employeeSalary->pf_loan + $employeeSalary->laptop_loan + $employeeSalary->motorcycle_loan;
+            $salary_total = $salaryStep->total_salary - $deduction_total;
+
+            return view('admin.salary.show_salary', [
+                'employee' => $employee,
+                'employeeSalary' => $employeeSalary,
+                'pf_loan_total' => $pf_loan_total,
+                'laptop_loan_total' => $laptop_loan_total,
+                'motorcycle_loan_total' => $motorcycle_loan_total,
+                'deduction_total' => $deduction_total,
+                'salary_total' => $salary_total,
+            ]);
+        } else {
+            // Handle the case where the employee has no salary record
+            return view('admin.salary.show_salary', [
+                'employee' => $employee,
+                'employeeSalary' => null, // You can pass null to indicate no salary data available
+            ]);
+        }
+    }
+
+
+
 
 
 

@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
+use App\Models\SalaryGrade;
 use App\Models\User;
 use PDF;
 use Dompdf\Dompdf;
@@ -32,6 +33,7 @@ class EmployeeController extends Controller
         $branches = Branch::all();
         $departments = Department::all();
         $designations = Designation::with('salaryGrade')->get();
+        $salaryGrades = SalaryGrade::all();
 
         // Additional data: Get salary steps for each designation
         $designations->each(function ($designation) {
@@ -44,7 +46,7 @@ class EmployeeController extends Controller
             'branches' => $branches,
             'departments' => $departments,
             'designations' => $designations,
-            'salarySteps' => SalaryStep::all(),
+            'salaryGrades' => $salaryGrades,
 ]);
     }
 
